@@ -1,29 +1,22 @@
 #pragma once
+
 #include "../Ref.h"
-class CComponent :
+
+class CGameObject :
 	public CRef
 {
-	friend class CGameObject;
+	friend class CScene;
 
 protected:
-	CComponent();
-	CComponent(const CComponent& com);
-	virtual ~CComponent() = 0;
+	CGameObject();
+	CGameObject(const CGameObject& obj);
+	virtual ~CGameObject();
 
 protected:
-	class CGameObject*		m_pObj;
-	class CScene*			m_pScene;
-	COMPONENT_TYPE			m_eType;
-
-public:
-	class CGameObject* GetObj();
-	COMPONENT_TYPE GetType()	const
-	{
-		return m_eType;
-	}
+	class CScene*		m_pScene;
 
 protected:
-	bool					m_bStart;
+	bool				m_bStart;
 
 public:
 	bool IsStart()	const

@@ -187,6 +187,26 @@ _tagMatrix _tagMatrix::StaticTranspose(const _tagMatrix& m)
 	return m1;
 }
 
+_tagMatrix _tagMatrix::StaticScaling(const _tagVector3& v)
+{
+	return _tagMatrix(DirectX::XMMatrixScaling(v.x, v.y, v.z));
+}
+
+_tagMatrix _tagMatrix::StaticScaling(float x, float y, float z)
+{
+	return _tagMatrix(DirectX::XMMatrixScaling(x, y, z));
+}
+
+_tagMatrix _tagMatrix::StaticTranslate(const _tagVector3& v)
+{
+	return _tagMatrix(DirectX::XMMatrixTranslation(v.x, v.y, v.z));
+}
+
+_tagMatrix _tagMatrix::StaticTranslate(float x, float y, float z)
+{
+	return _tagMatrix(DirectX::XMMatrixTranslation(x, y, z));
+}
+
 _tagMatrix _tagMatrix::StaticRotation(const _tagVector3& v)
 {
 	DirectX::XMMATRIX X = DirectX::XMMatrixRotationX(v.x);
@@ -207,20 +227,20 @@ _tagMatrix _tagMatrix::StaticRotation(float x, float y, float z)
 
 _tagMatrix _tagMatrix::StaticRotationX(float x)
 {
-	return DirectX::XMMatrixRotationX(DegToRad(x));
+	return _tagMatrix(DirectX::XMMatrixRotationX(DegToRad(x)));
 }
 
 _tagMatrix _tagMatrix::StaticRotationY(float y)
 {
-	return DirectX::XMMatrixRotationY(DegToRad(y));
+	return _tagMatrix(DirectX::XMMatrixRotationY(DegToRad(y)));
 }
 
 _tagMatrix _tagMatrix::StaticRotationZ(float z)
 {
-	return DirectX::XMMatrixRotationZ(DegToRad(z));
+	return _tagMatrix(DirectX::XMMatrixRotationZ(DegToRad(z)));
 }
 
 _tagMatrix _tagMatrix::StaticRotationAxis(const _tagVector3& v, float fAngle)
 {
-	return DirectX::XMMatrixRotationAxis(v.Convert(), fAngle);
+	return _tagMatrix(DirectX::XMMatrixRotationAxis(v.Convert(), fAngle));
 }

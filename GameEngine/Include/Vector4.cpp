@@ -32,7 +32,26 @@ _tagVector4::_tagVector4(float x, float y, float z, float w)	:
 {
 }
 
-float _tagVector4::operator[](const int& iIdx)
+float _tagVector4::operator[](const int& iIdx)	const
+{
+	switch (iIdx)
+	{
+	case 0:
+		return x;
+	case 1:
+		return y;
+	case 2:
+		return z;
+	case 3:
+		return w;
+	}
+
+	assert(false);
+
+	return x;
+}
+
+float& _tagVector4::operator[](const int& iIdx)
 {
 	switch (iIdx)
 	{

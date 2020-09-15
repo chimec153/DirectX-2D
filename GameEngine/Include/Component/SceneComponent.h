@@ -11,12 +11,7 @@ protected:
 	virtual ~CSceneComponent();
 
 protected:
-	class CShader* m_pShader;
-
-public:
-	class CShader* GetShader()	const;
-	void SetShader(const std::string& strName);
-	void SetShader(class CShader* pShader);
+	class CTransform*		m_pTransform;
 
 public:
 	virtual bool Init();

@@ -1,22 +1,14 @@
 #pragma once
-#include "Component.h"
-class CSceneComponent :
-	public CComponent
+#include "MeshComponent.h"
+class CStaticMeshComponent :
+	public CMeshComponent
 {
 	friend class CGameObject;
 
 protected:
-	CSceneComponent();
-	CSceneComponent(const CSceneComponent& com);
-	virtual ~CSceneComponent();
-
-protected:
-	class CShader* m_pShader;
-
-public:
-	class CShader* GetShader()	const;
-	void SetShader(const std::string& strName);
-	void SetShader(class CShader* pShader);
+	CStaticMeshComponent();
+	CStaticMeshComponent(const CStaticMeshComponent& com);
+	virtual ~CStaticMeshComponent();
 
 public:
 	virtual bool Init();
@@ -28,5 +20,4 @@ public:
 	virtual void Render(float fTime);
 	virtual void PostRender(float fTime);
 };
-
 

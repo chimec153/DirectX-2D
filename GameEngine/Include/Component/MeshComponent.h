@@ -1,22 +1,22 @@
 #pragma once
-#include "Component.h"
-class CSceneComponent :
-	public CComponent
+#include "SceneComponent.h"
+class CMeshComponent :
+	public CSceneComponent
 {
 	friend class CGameObject;
 
 protected:
-	CSceneComponent();
-	CSceneComponent(const CSceneComponent& com);
-	virtual ~CSceneComponent();
+	CMeshComponent();
+	CMeshComponent(const CMeshComponent& com);
+	virtual ~CMeshComponent();
 
 protected:
-	class CShader* m_pShader;
+	class CMesh* m_pMesh;
 
 public:
-	class CShader* GetShader()	const;
-	void SetShader(const std::string& strName);
-	void SetShader(class CShader* pShader);
+	class CMesh* GetMesh()	const;
+	void SetMesh(const std::string& strName);
+	void SetMesh(class CMesh* pShader);
 
 public:
 	virtual bool Init();
@@ -28,5 +28,4 @@ public:
 	virtual void Render(float fTime);
 	virtual void PostRender(float fTime);
 };
-
 
