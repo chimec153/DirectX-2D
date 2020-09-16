@@ -1,19 +1,17 @@
 #pragma once
-class CGameMode
+
+#include "Object/GameObject.h"
+
+class CPlayer :
+	public CGameObject
 {
-	friend class CScene;
-
-protected:
-	CGameMode();
-	~CGameMode();
-
-protected:
-	class CScene*		m_pScene;
-	class CGameObject* m_pPlayer;
-
 public:
-	class CGameObject* GetPlayer()	const;
-	void SetPlayer(class CGameObject* pPlayer);
+	CPlayer();
+	CPlayer(const CPlayer& player);
+	virtual ~CPlayer();
+
+private:
+	class CMesh2DComponent*			m_pMesh;
 
 public:
 	virtual bool Init();

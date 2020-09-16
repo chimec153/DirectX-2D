@@ -3,6 +3,7 @@
 #include "../Resource/ShaderManager.h"
 #include "../Resource/Shader.h"
 #include "../Resource/Mesh.h"
+#include "../Resource/Material.h"
 
 CSceneResource::CSceneResource()
 {
@@ -21,6 +22,12 @@ CSceneResource::~CSceneResource()
 
 	for (; iterShader != iterShaderEnd; ++iterShader)
 		GET_SINGLE(CShaderManager)->ReleaseShader(iterShader->first);
+
+	std::unordered_map<std::string, CShader*>::iterator iterMaterial = m_mapShader.begin();
+	std::unordered_map<std::string, CShader*>::iterator iterMaterialEnd = m_mapShader.end();
+
+	for (; iterMaterial != iterMaterialEnd; ++iterMaterial)
+		GET_SINGLE(CResourceManager)->ReleaseMaterial(iterMaterial->first);
 }
 
 bool CSceneResource::Init()
@@ -44,6 +51,29 @@ CMesh* CSceneResource::FindMesh(const std::string& strName)
 		m_mapMesh.insert(std::make_pair(strName, pMesh));
 
 		return pMesh;
+	}
+
+	iter->second->AddRef();
+
+	return iter->second;
+}
+
+CMaterial* CSceneResource::FindMaterial(const std::string& strName)
+{
+	std::unordered_map<std::string, class CMaterial*>::iterator iter = m_mapMaterial.find(strName);
+
+	if (iter == m_mapMaterial.end())
+	{
+		CMaterial* pMaterial = GET_SINGLE(CResourceManager)->FindMaterial(strName);
+
+		if (!pMaterial)
+			return nullptr;
+
+		pMaterial->AddRef();
+
+		m_mapMaterial.insert(std::make_pair(strName, pMaterial));
+
+		return pMaterial;
 	}
 
 	iter->second->AddRef();

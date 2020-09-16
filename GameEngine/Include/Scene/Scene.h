@@ -28,11 +28,14 @@ public:
 	}
 
 public:
-	class CGameMode* SetGameMode()
+	template <typename T>
+	bool SetGameMode()
 	{
 		SAFE_DELETE(m_pGameMode);
 
-		m_pGameMode = new CGameMode;
+		m_pGameMode = new T;
+
+		m_pGameMode->m_pScene = this;
 
 		if (!m_pGameMode->Init())
 		{

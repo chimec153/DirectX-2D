@@ -796,44 +796,298 @@ void CTransform::SetWorldRotZ(float z)
 
 void CTransform::SetWorldPos(const Vector3& v)
 {
+	m_vVelocity += v - m_vWorldPos;
+
+	m_vWorldPos = v;
+
+	m_vRelativePos = m_vWorldPos;
+
+	if (m_pParent)
+	{
+		Matrix tMat;
+
+		tMat.Rotation(m_pParent->GetWorldRot());
+
+		memcpy(&tMat._41, &m_pParent->GetWorldPos(), sizeof(Vector3));
+
+		tMat.Inverse();
+
+		m_vRelativePos = m_vWorldPos.TranslationCoor(tMat);
+	}
+
+	m_bUpdatePos = true;
+
+	size_t iSize = m_vecChild.size();
+
+	for (size_t i = 0; i < iSize; ++i)
+	{
+		m_vecChild[i]->InheritPos();
+	}
 }
 
 void CTransform::SetWorldPos(float x, float y, float z)
 {
+	m_vVelocity += Vector3(x,y,z) - m_vWorldPos;
+
+	m_vWorldPos = Vector3(x, y, z);
+
+	m_vRelativePos = m_vWorldPos;
+
+	if (m_pParent)
+	{
+		Matrix tMat;
+
+		tMat.Rotation(m_pParent->GetWorldRot());
+
+		memcpy(&tMat._41, &m_pParent->GetWorldPos(), sizeof(Vector3));
+
+		tMat.Inverse();
+
+		m_vRelativePos = m_vWorldPos.TranslationCoor(tMat);
+	}
+
+	m_bUpdatePos = true;
+
+	size_t iSize = m_vecChild.size();
+
+	for (size_t i = 0; i < iSize; ++i)
+	{
+		m_vecChild[i]->InheritPos();
+	}
 }
 
 void CTransform::AddWorldScale(const Vector3& v)
 {
+	m_vVelocityScale += v;
+
+	m_vWorldScale += v;
+
+	m_vRelativeScale = m_vWorldScale;
+
+	if (m_pParent && m_bInheritScale)
+		m_vRelativeScale = m_vWorldScale / m_pParent->GetWorldScale();
+
+	m_bUpdateScale = true;
+
+	size_t iSize = m_vecChild.size();
+
+	for (size_t i = 0; i < iSize; ++i)
+	{
+		m_vecChild[i]->InheritScale();
+	}
 }
 
 void CTransform::AddWorldScale(float x, float y, float z)
 {
+	m_vVelocityScale += Vector3(x,y,z);
+
+	m_vWorldScale += Vector3(x, y, z);
+
+	m_vRelativeScale = m_vWorldScale;
+
+	if (m_pParent && m_bInheritScale)
+		m_vRelativeScale = m_vWorldScale / m_pParent->GetWorldScale();
+
+	m_bUpdateScale = true;
+
+	size_t iSize = m_vecChild.size();
+
+	for (size_t i = 0; i < iSize; ++i)
+	{
+		m_vecChild[i]->InheritScale();
+	}
 }
 
 void CTransform::AddWorldRot(const Vector3& v)
 {
+	m_vVelocityRot += v;
+
+	m_vWorldRot += v;
+
+	m_vRelativeRot = m_vWorldRot;
+
+	if (m_pParent)
+	{
+		if (m_bInheritRotX)
+			m_vRelativeRot.x = m_vWorldRot.x - m_pParent->GetWorldRot().x;
+
+		if (m_bInheritRotY)
+			m_vRelativeRot.y = m_vWorldRot.y - m_pParent->GetWorldRot().y;
+
+		if (m_bInheritRotZ)
+			m_vRelativeRot.z = m_vWorldRot.z - m_pParent->GetWorldRot().z;
+	}
+
+	m_bUpdateRot = true;
+
+	size_t iSize = m_vecChild.size();
+
+	for (size_t i = 0; i < iSize; ++i)
+	{
+		m_vecChild[i]->InheritRot();
+	}
 }
 
 void CTransform::AddWorldRot(float x, float y, float z)
 {
+	m_vVelocityRot += Vector3(x,y,z);
+
+	m_vWorldRot += Vector3(x,y,z);
+
+	m_vRelativeRot = m_vWorldRot;
+
+	if (m_pParent)
+	{
+		if (m_bInheritRotX)
+			m_vRelativeRot.x = m_vWorldRot.x - m_pParent->GetWorldRot().x;
+
+		if (m_bInheritRotY)
+			m_vRelativeRot.y = m_vWorldRot.y - m_pParent->GetWorldRot().y;
+
+		if (m_bInheritRotZ)
+			m_vRelativeRot.z = m_vWorldRot.z - m_pParent->GetWorldRot().z;
+	}
+
+	m_bUpdateRot = true;
+
+	size_t iSize = m_vecChild.size();
+
+	for (size_t i = 0; i < iSize; ++i)
+	{
+		m_vecChild[i]->InheritRot();
+	}
 }
 
 void CTransform::AddWorldRotX(float x)
 {
+	m_vVelocityRot.x += x;
+
+	m_vWorldRot.x = x;
+
+	m_vRelativeRot.x = m_vWorldRot.x;
+
+	if (m_pParent)
+	{
+		if (m_bInheritRotX)
+			m_vRelativeRot.x = m_vWorldRot.x - m_pParent->GetWorldRot().x;
+	}
+
+	m_bUpdateRot = true;
+
+	size_t iSize = m_vecChild.size();
+
+	for (size_t i = 0; i < iSize; ++i)
+	{
+		m_vecChild[i]->InheritRot();
+	}
 }
 
 void CTransform::AddWorldRotY(float y)
 {
+	m_vVelocityRot.y += y;
+
+	m_vWorldRot.y = y;
+
+	m_vRelativeRot.y = m_vWorldRot.y;
+
+	if (m_pParent)
+	{
+		if (m_bInheritRotX)
+			m_vRelativeRot.y = m_vWorldRot.y - m_pParent->GetWorldRot().y;
+	}
+
+	m_bUpdateRot = true;
+
+	size_t iSize = m_vecChild.size();
+
+	for (size_t i = 0; i < iSize; ++i)
+	{
+		m_vecChild[i]->InheritRot();
+	}
 }
 
 void CTransform::AddWorldRotZ(float z)
 {
+	m_vVelocityRot.z += z;
+
+	m_vWorldRot.z = z;
+
+	m_vRelativeRot.z = m_vWorldRot.z;
+
+	if (m_pParent)
+	{
+		if (m_bInheritRotX)
+			m_vRelativeRot.z = m_vWorldRot.z - m_pParent->GetWorldRot().z;
+	}
+
+	m_bUpdateRot = true;
+
+	size_t iSize = m_vecChild.size();
+
+	for (size_t i = 0; i < iSize; ++i)
+	{
+		m_vecChild[i]->InheritRot();
+	}
 }
 
 void CTransform::AddWorldPos(const Vector3& v)
 {
+	m_vVelocity += v;
+
+	m_vWorldPos += v;
+
+	m_vRelativePos = m_vWorldPos;
+
+	if (m_pParent)
+	{
+		Matrix tMat;
+
+		tMat.Rotation(m_pParent->GetWorldRot());
+
+		memcpy(&tMat._41, &m_pParent->GetWorldPos(), sizeof(Vector3));
+
+		tMat.Inverse();
+
+		m_vRelativePos = m_vWorldPos.TranslationCoor(tMat);
+	}
+
+	m_bUpdatePos = true;
+
+	size_t iSize = m_vecChild.size();
+
+	for (size_t i = 0; i < iSize; ++i)
+	{
+		m_vecChild[i]->InheritPos();
+	}
 }
 
 void CTransform::AddWorldPos(float x, float y, float z)
 {
+	m_vVelocity += Vector3(x,y,z);
+
+	m_vWorldPos += Vector3(x,y,z);
+
+	m_vRelativePos = m_vWorldPos;
+
+	if (m_pParent)
+	{
+		Matrix tMat;
+
+		tMat.Rotation(m_pParent->GetWorldRot());
+
+		memcpy(&tMat._41, &m_pParent->GetWorldPos(), sizeof(Vector3));
+
+		tMat.Inverse();
+
+		m_vRelativePos = m_vWorldPos.TranslationCoor(tMat);
+	}
+
+	m_bUpdatePos = true;
+
+	size_t iSize = m_vecChild.size();
+
+	for (size_t i = 0; i < iSize; ++i)
+	{
+		m_vecChild[i]->InheritPos();
+	}
 }

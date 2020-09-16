@@ -32,6 +32,10 @@ protected:
 protected:
 	Vector3		m_vMin;
 	Vector3		m_vMax;
+	class CMaterial* m_pMaterial;
+
+public:
+	void SetMaterial(class CMaterial* pMaterial);
 
 public:
 	Vector3 GetMax()	const

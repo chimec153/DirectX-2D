@@ -1,6 +1,7 @@
 #include "ResourceManager.h"
 #include "Mesh2D.h"
 #include "ShaderManager.h"
+#include "Material.h"
 
 DEFINITION_SINGLE(CResourceManager)
 
@@ -15,6 +16,7 @@ CResourceManager::~CResourceManager()
 	SAFE_RELEASE(m_pDefaultMesh2D);
 	DESTROY_SINGLE(CShaderManager);
 	SAFE_RELEASE_MAP(m_mapMesh);
+	SAFE_RELEASE_MAP(m_mapMaterial);
 }
 
 CMesh2D* CResourceManager::GetDefaultMesh() const
@@ -35,6 +37,14 @@ bool CResourceManager::Init()
 
 	if (!m_pDefaultMesh2D->CreateMesh())
 		return false;
+
+	CMaterial* pMaterial = CreateMaterial("Color");
+
+	pMaterial->SetShader("Stardard2D");
+
+	m_pDefaultMesh2D->SetMaterial(pMaterial);
+
+	SAFE_RELEASE(pMaterial);
 
 	return true;
 }
@@ -60,4 +70,51 @@ void CResourceManager::ReleaseMesh(const std::string& strName)
 
 	if (iter->second->Release() == 0)
 		m_mapMesh.erase(iter);
+}
+
+CMaterial* CResourceManager::FindMaterial(const std::string& strName)
+{
+	std::unordered_map<std::string, CMaterial*>::iterator iter = m_mapMaterial.find(strName);
+
+	if (iter == m_mapMaterial.end())
+		return nullptr;
+
+	iter->second->AddRef();
+
+	return iter->second;
+}
+
+void CResourceManager::ReleaseMaterial(const std::string& strName)
+{
+	std::unordered_map<std::string, CMaterial*>::iterator iter = m_mapMaterial.find(strName);
+
+	if (iter == m_mapMaterial.end())
+		return;
+
+	if (iter->second->Release() == 0)
+		m_mapMaterial.erase(iter);
+}
+
+CMaterial* CResourceManager::CreateMaterial(const std::string& strName)
+{
+	CMaterial* pMaterial = FindMaterial(strName);
+
+	if (pMaterial)
+		return pMaterial;
+
+	pMaterial = new CMaterial;
+
+	pMaterial->SetName(strName);
+
+	if (!pMaterial->Init())
+	{
+		SAFE_RELEASE(pMaterial);
+		return nullptr;
+	}
+
+	pMaterial->AddRef();
+
+	m_mapMaterial.insert(std::make_pair(strName, pMaterial));
+
+	return pMaterial;
 }

@@ -1,20 +1,20 @@
 #include "Share.fx"
 
-struct VS_INPUT
+struct VS_INPUT_COLOR
 {
 	float3 vPos	:	POSITION;
 	float4 vColor	:	COLOR;
 };
 
-struct VS_OUTPUT
+struct VS_OUTPUT_COLOR
 {
 	float4 vPos	:	SV_POSITION;
 	float4 vColor	:	COLOR;
 };
 
-VS_OUTPUT GetOutputVS(VS_INPUT input)
+VS_OUTPUT_COLOR GetOutputVS(VS_INPUT_COLOR input)
 {
-	VS_OUTPUT output = (VS_OUTPUT)0;
+	VS_OUTPUT_COLOR output = (VS_OUTPUT_COLOR)0;
 
 	output.vPos = float4(input.vPos, 1.f);
 	output.vColor = input.vColor;
@@ -22,11 +22,11 @@ VS_OUTPUT GetOutputVS(VS_INPUT input)
 	return output;
 }
 
-PS_OUTPUT_COLOR GetOutputPS(VS_OUTPUT input)
+PS_OUTPUT_SINGLE GetOutputPS(VS_OUTPUT_COLOR input)
 {
-	PS_OUTPUT_COLOR color = (PS_OUTPUT_COLOR)0;
+	PS_OUTPUT_SINGLE output = (PS_OUTPUT_SINGLE)0;
 
-	color.vColor = input.vColor;
+	output.vColor = input.vColor;
 
-	return color;
+	return output;
 }

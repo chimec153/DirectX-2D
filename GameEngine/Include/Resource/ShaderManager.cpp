@@ -20,18 +20,20 @@ bool CShaderManager::Init()
 {
 	CShader* pShader = CreateShader<CGraphicShader>("Standard2D");
 
+	if (!LoadVertexShader("Standard2D", "GetOutputVS", 
+		TEXT("VertexShader.fx")))
+		return false;
+
+	if (!LoadPixelShader("Standard2D", "GetOutputPS", 
+		TEXT("VertexShader.fx")))
+		return false;
+
 	pShader->AddInputDesc("POSITION", 0,
-		DXGI_FORMAT_R32G32B32_FLOAT, 0, 12,
+		DXGI_FORMAT_R32G32B32_FLOAT, 0, 16,
 		D3D11_INPUT_PER_VERTEX_DATA, 0);
 	pShader->AddInputDesc("COLOR", 0,
 		DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 16,
 		D3D11_INPUT_PER_VERTEX_DATA, 0);
-
-	if (!LoadVertexShader("Standard2D", "GetOutputVS", TEXT("VertexShader.fx")))
-		return false;
-
-	if (!LoadPixelShader("Standard2D", "GetOutputPS", TEXT("VertexShader.fx")))
-		return false;
 
 	if (!pShader->CreateInputLayout())
 	{

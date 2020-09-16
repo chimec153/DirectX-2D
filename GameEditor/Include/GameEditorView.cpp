@@ -13,6 +13,8 @@
 #include "GameEditorDoc.h"
 #include "GameEditorView.h"
 #include "Engine.h"
+#include "Scene/SceneManager.h"
+#include "Client/GameMode/MainGameMode.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -51,6 +53,8 @@ void CGameEditorView::OnInitialUpdate()
 	CView::OnInitialUpdate();
 
 	GET_SINGLE(CEngine)->Init(AfxGetInstanceHandle(), m_hWnd, 1280, 720, true);
+
+	GET_SINGLE(CSceneManager)->SetGameMode<CMainGameMode>();
 }
 
 // CGameEditorView 그리기

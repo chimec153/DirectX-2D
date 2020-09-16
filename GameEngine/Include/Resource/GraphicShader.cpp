@@ -59,7 +59,8 @@ bool CGraphicShader::LoadVertexShader(const char* pEntryName, const TCHAR* pFile
 		iFlag, 0, &m_pVSBlob, &pError)))
 		return false;
 
-	if (FAILED(DEVICE->CreateVertexShader(m_pVSBlob->GetBufferPointer(), m_pVSBlob->GetBufferSize(), nullptr, &m_pVS)))
+	if (FAILED(DEVICE->CreateVertexShader(m_pVSBlob->GetBufferPointer(), 
+		m_pVSBlob->GetBufferSize(), nullptr, &m_pVS)))
 		return false;
 
 	return true;
@@ -92,7 +93,8 @@ bool CGraphicShader::LoadPixelShader(const char* pEntryName, const TCHAR* pFileN
 		iFlag, 0, &m_pPSBlob, &pError)))
 		return false;
 
-	if (FAILED(DEVICE->CreatePixelShader(m_pPSBlob->GetBufferPointer(), m_pPSBlob->GetBufferSize(), nullptr, &m_pPS)))
+	if (FAILED(DEVICE->CreatePixelShader(m_pPSBlob->GetBufferPointer(), 
+		m_pPSBlob->GetBufferSize(), nullptr, &m_pPS)))
 		return false;
 
 	return true;
@@ -204,8 +206,9 @@ bool CGraphicShader::LoadDomainShader(const char* pEntryName, const TCHAR* pFile
 
 bool CGraphicShader::CreateInputLayout()
 {
-	if (FAILED(DEVICE->CreateInputLayout(&m_vecInputDesc[0], (UINT)m_vecInputDesc.size(), 
-		m_pVSBlob->GetBufferPointer(), m_pVSBlob->GetBufferSize(), &m_pInputLayout)))
+	if (FAILED(DEVICE->CreateInputLayout(&m_vecInputDesc[0], 
+		(UINT)m_vecInputDesc.size(), m_pVSBlob->GetBufferPointer(), 
+		m_pVSBlob->GetBufferSize(), &m_pInputLayout)))
 		return false;
 
 	return true;
@@ -216,8 +219,8 @@ void CGraphicShader::SetShader()
 	CONTEXT->VSSetShader(m_pVS, nullptr, 0);
 	CONTEXT->PSSetShader(m_pPS, nullptr, 0);
 	CONTEXT->HSSetShader(m_pHS, nullptr, 0);
-	CONTEXT->GSSetShader(m_pGS, nullptr, 0);
 	CONTEXT->DSSetShader(m_pDS, nullptr, 0);
+	CONTEXT->GSSetShader(m_pGS, nullptr, 0);
 
 	CONTEXT->IASetInputLayout(m_pInputLayout);
 }

@@ -1,50 +1,17 @@
 #include "MeshComponent.h"
-#include "../Resource/Mesh.h"
-#include "../Scene/Scene.h"
-#include "../Scene/SceneResource.h"
+#include "../Resource/ResourceManager.h"
 
-CMeshComponent::CMeshComponent() :
-	m_pMesh(nullptr)
+CMeshComponent::CMeshComponent()
 {
 }
 
 CMeshComponent::CMeshComponent(const CMeshComponent& com)	:
 	CSceneComponent(com)
 {
-	m_pMesh = com.m_pMesh;
-
-	if (m_pMesh)
-		m_pMesh->AddRef();
 }
 
 CMeshComponent::~CMeshComponent()
 {
-	SAFE_RELEASE(m_pMesh);
-}
-
-CMesh* CMeshComponent::GetMesh() const
-{
-	if (m_pMesh)
-		m_pMesh->AddRef();
-
-	return m_pMesh;
-}
-
-void CMeshComponent::SetMesh(const std::string& strName)
-{
-	SAFE_RELEASE(m_pMesh);
-
-	m_pMesh = m_pScene->GetResource()->FindMesh(strName);
-}
-
-void CMeshComponent::SetMesh(class CMesh* pMesh)
-{
-	SAFE_RELEASE(m_pMesh);
-
-	m_pMesh = pMesh;
-
-	if (m_pMesh)
-		m_pMesh->AddRef();
 }
 
 bool CMeshComponent::Init()

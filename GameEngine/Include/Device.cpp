@@ -13,8 +13,7 @@ CDevice::CDevice()	:
 {
 	memset(m_pClearColor, 0, sizeof(float) * 4);
 
-	m_pClearColor[1] = 0.1f;
-	m_pClearColor[2] = 0.1f;
+	m_pClearColor[2] = 1.f;
 }
 
 CDevice::~CDevice()
@@ -44,6 +43,9 @@ bool CDevice::Init(HWND hWnd, int iWidth, int iHeight, bool bWindowMode)
 #endif
 	iFlag |= D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 
+	D3D_FEATURE_LEVEL eLevel = D3D_FEATURE_LEVEL_11_0;
+	D3D_FEATURE_LEVEL eLevel1 = D3D_FEATURE_LEVEL_11_0;
+
 	DXGI_SWAP_CHAIN_DESC tSwapChain = {};
 
 	tSwapChain.BufferDesc.Width = iWidth;
@@ -55,20 +57,21 @@ bool CDevice::Init(HWND hWnd, int iWidth, int iHeight, bool bWindowMode)
 	tSwapChain.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 	tSwapChain.BufferCount = 1;
 	tSwapChain.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	tSwapChain.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 	tSwapChain.OutputWindow = m_hWnd;
-	tSwapChain.Windowed = bWindowMode;
 	tSwapChain.SampleDesc.Count = 1;
 	tSwapChain.SampleDesc.Quality = 0;
-
-	D3D_FEATURE_LEVEL eLevel = D3D_FEATURE_LEVEL_11_0;
-	D3D_FEATURE_LEVEL eLevel1 = D3D_FEATURE_LEVEL_11_0;
+	tSwapChain.Windowed = bWindowMode;
+	tSwapChain.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 
 	if (FAILED(D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE,
 		0, iFlag, &eLevel, 1, D3D11_SDK_VERSION, &tSwapChain,
-		&m_pSwapChain, &m_pDevice, &eLevel1,
-		&m_pContext)))
+		&m_pSwapChain, &m_pDevice, &eLevel1, &m_pContext)))
 		return false;
+
+	D3D11_FEATURE_DATA_THREADING tThread = {};
+
+	HRESULT iResult = m_pDevice->CheckFeatureSupport(D3D11_FEATURE_THREADING, 
+		&tThread, sizeof(tThread));
 
 	ID3D11Texture2D* pBackBuffer = nullptr;
 
@@ -78,21 +81,17 @@ bool CDevice::Init(HWND hWnd, int iWidth, int iHeight, bool bWindowMode)
 
 	SAFE_RELEASE(pBackBuffer);
 
-	D3D11_FEATURE_DATA_THREADING tThread = {};
-
-	HRESULT iResult = m_pDevice->CheckFeatureSupport(D3D11_FEATURE_THREADING, &tThread, sizeof(tThread));
-
 	D3D11_TEXTURE2D_DESC  tDepthDesc = {};
 
 	tDepthDesc.Width = iWidth;
 	tDepthDesc.Height = iHeight;
 	tDepthDesc.ArraySize = 1;
-	tDepthDesc.MipLevels = 1;
 	tDepthDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	tDepthDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	tDepthDesc.Usage = D3D11_USAGE_DEFAULT;
 	tDepthDesc.SampleDesc.Count = 1;
 	tDepthDesc.SampleDesc.Quality = 0;
-	tDepthDesc.Usage = D3D11_USAGE_DEFAULT;
-	tDepthDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	tDepthDesc.MipLevels = 1;
 
 	ID3D11Texture2D* pDepthTex = nullptr;
 
@@ -117,10 +116,9 @@ bool CDevice::Init(HWND hWnd, int iWidth, int iHeight, bool bWindowMode)
 
 void CDevice::ClearTarget()
 {
+	m_pContext->ClearRenderTargetView(m_pTargetView, m_pClearColor);
 	m_pContext->ClearDepthStencilView(m_pDepthView, 
 		D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
-
-	m_pContext->ClearRenderTargetView(m_pTargetView, m_pClearColor);
 }
 
 void CDevice::Render()

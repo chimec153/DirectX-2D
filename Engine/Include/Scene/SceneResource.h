@@ -13,10 +13,14 @@ private:
 private:
 	std::unordered_map<std::string, class CMesh*>			m_mapMesh;
 	std::unordered_map<std::string, class CShader*>			m_mapShader;
+	std::unordered_map<std::string, class CMaterial*>		m_mapMaterial;
 
 public:
 	bool Init();
 
-	class CShader* FindShader(const std::string& strName);
+	class CMesh* FindMesh(const std::string& strName);
+
+public:
+	class CMaterial* FindMaterial(const std::string& strName);
 };
 

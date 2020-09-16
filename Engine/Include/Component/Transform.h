@@ -1,42 +1,58 @@
 #pragma once
 
-#include "../Ref.h"
+#include "../GameEngine.h"
 
-class CGameObject :
-	public CRef
+class CTransform
 {
-	friend class CScene;
+	friend class CSceneComponent;
 
-protected:
-	CGameObject();
-	CGameObject(const CGameObject& obj);
-	virtual ~CGameObject();
+private:
+	CTransform();
+	CTransform(const CTransform& transform);
+	~CTransform();
 
-protected:
-	class CScene*							m_pScene;
+private:
+	class CScene*				m_pScene;
+	class CSceneComponent*		m_pOwner;
+	CTransform*					m_pParent;
+	std::vector<CTransform*>	m_vecChild;
 
-protected:
-	bool									m_bStart;
-	class CSceneComponent*					m_pRootComponent;
-	std::vector<class CObjectComponent*>	m_vecObjectComponent;
+private:
+	Vector3						m_vVelocityScale;
+	Vector3						m_vVelocityRot;
+	Vector3						m_vVelocity;
+	Vector3						m_vRelativeScale;
+	Vector3						m_vRelativeRot;
+	Vector3						m_vRelativePos;
+	Vector3						m_vRelativeAxis[AXIS_END];
+	bool						m_bInheritScale;
+	bool						m_bInheritRotX;
+	bool						m_bInheritRotY;
+	bool						m_bInheritRotZ;
+	bool						m_bUpdateScale;
+	bool						m_bUpdateRot;
+	bool						m_bUpdatePos;
 
 public:
-	bool IsStart()	const
+	void SetInheritScale(bool bInherit)
 	{
-		return m_bStart;
+		m_bInheritScale = bInherit;
 	}
 
-	void SetRootComponent(class CSceneComponent*);
+	void SetInheritRotX(bool bInherit)
+	{
+		m_bInheritRotX = bInherit;
+	}
 
-public:
-	virtual bool Init();
-	virtual void Start();
-	virtual void Update(float fTime);
-	virtual void PostUpdate(float fTime);
-	virtual void Collision(float fTime);
-	virtual void PreRender(float fTime);
-	virtual void Render(float fTime);
-	virtual void PostRender(float fTime);
+	void SetInheritRotY(bool bInherit)
+	{
+		m_bInheritRotY = bInherit;
+	}
+
+	void SetInheritRotZ(bool bInherit)
+	{
+		m_bInheritRotZ = bInherit;
+	}
 
 public:
 	void InheritScale();
@@ -60,6 +76,14 @@ public:
 	void AddRelativeRotZ(float z);
 	void AddRelativePos(const Vector3& v);
 	void AddRelativePos(float x, float y, float z);
+
+private:
+	Vector3						m_vWorldScale;
+	Vector3						m_vWorldRot;
+	Vector3						m_vWorldPos;
+	Vector3						m_vWorldAxis[AXIS_END];
+	Vector3						m_vPivot;
+	Vector3						m_vMeshSize;
 
 public:
 	Vector3 GetRelativeScale()			const;
@@ -92,30 +116,16 @@ public:
 	void AddWorldPos(const Vector3& v);
 	void AddWorldPos(float x, float y, float z);
 
+private:
+	Matrix						m_matScale;
+	Matrix						m_matRot;
+	Matrix						m_matPos;
+	Matrix						m_matWorld;
+
 public:
-	template <typename T>
-	T* CreateComponent(const std::string& strName)
-	{
-		T* pComponent = new T;
-
-		pComponent->SetName(strName);
-		pComponent->m_pScene = m_pScene;
-		pComponent->m_pObj = this;
-
-		if (!pComponent->Init())
-		{
-			SAFE_RELEASE(pComponent);
-			return nullptr;
-		}
-
-		if (pComponent->GetType() == COMPONENT_TYPE::CT_OBJECT)
-		{
-			pComponent->AddRef();
-
-			m_vecObjectComponent.push_back((CObjectComponent*)pComponent);
-		}
-
-		return pComponent;
-	}
+	void Update(float fTime);
+	void PostUpdate(float fTime);
+	void SetTransform();
+	CTransform* Clone();
 };
 

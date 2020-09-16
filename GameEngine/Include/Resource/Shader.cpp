@@ -21,19 +21,20 @@ bool CShader::CreateInputLayout()
 	return false;
 }
 
-bool CShader::AddInputDesc(const char* pSemanticName, UINT iSemanticIndex, 
-	DXGI_FORMAT eFmt, UINT iInputSlot, UINT iAlignedByteOffset, 
-	D3D11_INPUT_CLASSIFICATION eInputSlotClass, UINT iInstanceDataStepRate)
+bool CShader::AddInputDesc(const char* pSemanticName, 
+	UINT iSemanticIndex, DXGI_FORMAT eFmt, UINT iInputSlot, 
+	UINT iAlignedByteOffset, D3D11_INPUT_CLASSIFICATION eInputSlotClass, 
+	UINT iInstanceDataStepRate)
 {
 	D3D11_INPUT_ELEMENT_DESC tDesc = {};
 
+	tDesc.SemanticName = pSemanticName;
+	tDesc.SemanticIndex = iSemanticIndex;
 	tDesc.Format = eFmt;
 	tDesc.InputSlot = iInputSlot;
+	tDesc.AlignedByteOffset = m_iDescSize;
 	tDesc.InputSlotClass = eInputSlotClass;
 	tDesc.InstanceDataStepRate = iInstanceDataStepRate;
-	tDesc.SemanticIndex = iSemanticIndex;
-	tDesc.SemanticName = pSemanticName;
-	tDesc.AlignedByteOffset = m_iDescSize;
 
 	m_vecInputDesc.push_back(tDesc);
 

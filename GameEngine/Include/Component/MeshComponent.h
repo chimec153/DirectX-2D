@@ -10,14 +10,6 @@ protected:
 	CMeshComponent(const CMeshComponent& com);
 	virtual ~CMeshComponent();
 
-protected:
-	class CMesh* m_pMesh;
-
-public:
-	class CMesh* GetMesh()	const;
-	void SetMesh(const std::string& strName);
-	void SetMesh(class CMesh* pShader);
-
 public:
 	virtual bool Init();
 	virtual void Start();
