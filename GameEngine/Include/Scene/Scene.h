@@ -71,6 +71,7 @@ public:
 public:
 	bool Init();
 	void Start();
+	void Input(float fTime);
 	void Update(float fTime);
 	void PostUpdate(float fTime);
 	void Collision(float fTime);

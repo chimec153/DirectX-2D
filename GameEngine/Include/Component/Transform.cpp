@@ -1,4 +1,6 @@
 #include "Transform.h"
+#include "../Device.h"
+#include "../Resource/ShaderManager.h"
 
 CTransform::CTransform()	:
 	m_pScene(nullptr),
@@ -17,6 +19,8 @@ CTransform::CTransform()	:
 		m_vRelativeAxis[i] = Vector3::Axis[i];
 		m_vWorldAxis[i] = Vector3::Axis[i];
 	}
+
+	m_vMeshSize = Vector3(1.f, 1.f, 1.f);
 }
 
 CTransform::CTransform(const CTransform& transform)
@@ -57,6 +61,23 @@ void CTransform::PostUpdate(float fTime)
 
 void CTransform::SetTransform()
 {
+	Resolution tRS = RESOLUTION;
+
+	m_tCBuffer.matWorld = m_matWorld;
+	m_tCBuffer.matView = DirectX::XMMatrixIdentity();
+	m_tCBuffer.matProj = DirectX::XMMatrixOrthographicOffCenterLH(-tRS.iWidth / 2.f, tRS.iWidth / 2.f, 
+		-tRS.iHeight / 2.f, tRS.iHeight / 2.f, 0.f, 3000.f);
+	m_tCBuffer.matWV = m_matWorld;
+	m_tCBuffer.matWVP = m_tCBuffer.matWorld * m_tCBuffer.matProj;
+	m_tCBuffer.vPivot = m_vPivot;
+	m_tCBuffer.vMeshSize = m_vMeshSize;
+
+	m_tCBuffer.matWorld.Transpose();
+	m_tCBuffer.matProj.Transpose();
+	m_tCBuffer.matWV.Transpose();
+	m_tCBuffer.matWVP.Transpose();
+
+	GET_SINGLE(CShaderManager)->UpdateCBuffer("Transform", &m_tCBuffer);
 }
 
 CTransform* CTransform::Clone()
@@ -90,6 +111,9 @@ void CTransform::InheritRot()
 	if (m_bInheritRotZ)
 		m_vWorldRot.z = m_vRelativeRot.z + m_pParent->GetWorldRot().z;
 
+	if (m_pParent)
+		InheritPos();
+
 	m_bUpdateRot = true;
 
 	size_t iSize = m_vecChild.size();
@@ -106,7 +130,7 @@ void CTransform::InheritPos()
 
 	tMat.Rotation(m_pParent->GetWorldRot());
 
-	memcpy(&tMat._41, &m_pParent->GetWorldPos(), sizeof(Vector3));
+	memcpy(&tMat._41, &m_pParent->GetWorldPos(), sizeof(float)*3);
 
 	m_vWorldPos = m_vRelativePos.TranslationCoor(tMat);
 
@@ -184,6 +208,24 @@ void CTransform::SetRelativeRot(const Vector3& v)
 
 	m_bUpdateRot = true;
 
+	Matrix matRot;
+
+	matRot.Rotation(m_vRelativeRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vRelativeAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vRelativeAxis[i].Normalize();
+	}
+
+	matRot.Rotation(m_vWorldRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vWorldAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vWorldAxis[i].Normalize();
+	}
+
 	size_t iSize = m_vecChild.size();
 
 	for (size_t i = 0; i < iSize; ++i)
@@ -214,6 +256,24 @@ void CTransform::SetRelativeRot(float x, float y, float z)
 
 	m_bUpdateRot = true;
 
+	Matrix matRot;
+
+	matRot.Rotation(m_vRelativeRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vRelativeAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vRelativeAxis[i].Normalize();
+	}
+
+	matRot.Rotation(m_vWorldRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vWorldAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vWorldAxis[i].Normalize();
+	}
+
 	size_t iSize = m_vecChild.size();
 
 	for (size_t i = 0; i < iSize; ++i)
@@ -237,6 +297,24 @@ void CTransform::SetRelativeRotX(float x)
 	}
 
 	m_bUpdateRot = true;
+
+	Matrix matRot;
+
+	matRot.Rotation(m_vRelativeRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vRelativeAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vRelativeAxis[i].Normalize();
+	}
+
+	matRot.Rotation(m_vWorldRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vWorldAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vWorldAxis[i].Normalize();
+	}
 
 	size_t iSize = m_vecChild.size();
 
@@ -262,6 +340,24 @@ void CTransform::SetRelativeRotY(float y)
 
 	m_bUpdateRot = true;
 
+	Matrix matRot;
+
+	matRot.Rotation(m_vRelativeRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vRelativeAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vRelativeAxis[i].Normalize();
+	}
+
+	matRot.Rotation(m_vWorldRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vWorldAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vWorldAxis[i].Normalize();
+	}
+
 	size_t iSize = m_vecChild.size();
 
 	for (size_t i = 0; i < iSize; ++i)
@@ -286,6 +382,24 @@ void CTransform::SetRelativeRotZ(float z)
 
 	m_bUpdateRot = true;
 
+	Matrix matRot;
+
+	matRot.Rotation(m_vRelativeRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vRelativeAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vRelativeAxis[i].Normalize();
+	}
+
+	matRot.Rotation(m_vWorldRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vWorldAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vWorldAxis[i].Normalize();
+	}
+
 	size_t iSize = m_vecChild.size();
 
 	for (size_t i = 0; i < iSize; ++i)
@@ -308,7 +422,7 @@ void CTransform::SetRelativePos(const Vector3& v)
 
 		tMat.Rotation(m_pParent->GetWorldRot());
 
-		memcpy(&tMat._41, &m_pParent->GetWorldPos(), sizeof(Vector3));
+		memcpy(&tMat._41, &m_pParent->GetWorldPos(), sizeof(float) * 3);
 
 		m_vWorldPos = m_vRelativePos.TranslationCoor(tMat);
 	}
@@ -337,7 +451,7 @@ void CTransform::SetRelativePos(float x, float y, float z)
 
 		tMat.Rotation(m_pParent->GetWorldRot());
 
-		memcpy(&tMat._41, &m_pParent->GetWorldPos(), sizeof(Vector3));
+		memcpy(&tMat._41, &m_pParent->GetWorldPos(), sizeof(float) * 3);
 
 		m_vWorldPos = m_vRelativePos.TranslationCoor(tMat);
 	}	
@@ -416,6 +530,24 @@ void CTransform::AddRelativeRot(const Vector3& v)
 
 	m_bUpdateRot = true;
 
+	Matrix matRot;
+
+	matRot.Rotation(m_vRelativeRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vRelativeAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vRelativeAxis[i].Normalize();
+	}
+
+	matRot.Rotation(m_vWorldRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vWorldAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vWorldAxis[i].Normalize();
+	}
+
 	size_t iSize = m_vecChild.size();
 
 	for (size_t i = 0; i < iSize; ++i)
@@ -446,6 +578,24 @@ void CTransform::AddRelativeRot(float x, float y, float z)
 
 	m_bUpdateRot = true;
 
+	Matrix matRot;
+
+	matRot.Rotation(m_vRelativeRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vRelativeAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vRelativeAxis[i].Normalize();
+	}
+
+	matRot.Rotation(m_vWorldRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vWorldAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vWorldAxis[i].Normalize();
+	}
+
 	size_t iSize = m_vecChild.size();
 
 	for (size_t i = 0; i < iSize; ++i)
@@ -466,6 +616,24 @@ void CTransform::AddRelativeRotX(float x)
 		m_vWorldRot.x = m_vRelativeRot.x + m_pParent->GetWorldRot().x;
 
 	m_bUpdateRot = true;
+
+	Matrix matRot;
+
+	matRot.Rotation(m_vRelativeRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vRelativeAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vRelativeAxis[i].Normalize();
+	}
+
+	matRot.Rotation(m_vWorldRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vWorldAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vWorldAxis[i].Normalize();
+	}
 
 	size_t iSize = m_vecChild.size();
 
@@ -488,6 +656,24 @@ void CTransform::AddRelativeRotY(float y)
 
 	m_bUpdateRot = true;
 
+	Matrix matRot;
+
+	matRot.Rotation(m_vRelativeRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vRelativeAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vRelativeAxis[i].Normalize();
+	}
+
+	matRot.Rotation(m_vWorldRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vWorldAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vWorldAxis[i].Normalize();
+	}
+
 	size_t iSize = m_vecChild.size();
 
 	for (size_t i = 0; i < iSize; ++i)
@@ -508,6 +694,24 @@ void CTransform::AddRelativeRotZ(float z)
 		m_vWorldRot.z = m_vRelativeRot.z + m_pParent->GetWorldRot().z;
 
 	m_bUpdateRot = true;
+
+	Matrix matRot;
+
+	matRot.Rotation(m_vRelativeRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vRelativeAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vRelativeAxis[i].Normalize();
+	}
+
+	matRot.Rotation(m_vWorldRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vWorldAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vWorldAxis[i].Normalize();
+	}
 
 	size_t iSize = m_vecChild.size();
 
@@ -531,7 +735,7 @@ void CTransform::AddRelativePos(const Vector3& v)
 
 		tMat.Rotation(m_pParent->GetWorldRot());
 
-		memcpy(&tMat._41, &m_pParent->GetWorldPos(), sizeof(Vector3));
+		memcpy(&tMat._41, &m_pParent->GetWorldPos(), sizeof(float) * 3);
 
 		m_vWorldPos = m_vRelativePos.TranslationCoor(tMat);
 	}
@@ -560,7 +764,7 @@ void CTransform::AddRelativePos(float x, float y, float z)
 
 		tMat.Rotation(m_pParent->GetWorldRot());
 
-		memcpy(&tMat._41, &m_pParent->GetWorldPos(), sizeof(Vector3));
+		memcpy(&tMat._41, &m_pParent->GetWorldPos(), sizeof(float) * 3);
 
 		m_vWorldPos = m_vRelativePos.TranslationCoor(tMat);
 	}
@@ -684,6 +888,24 @@ void CTransform::SetWorldRot(const Vector3& v)
 
 	m_bUpdateRot = true;
 
+	Matrix matRot;
+
+	matRot.Rotation(m_vRelativeRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vRelativeAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vRelativeAxis[i].Normalize();
+	}
+
+	matRot.Rotation(m_vWorldRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vWorldAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vWorldAxis[i].Normalize();
+	}
+
 	size_t iSize = m_vecChild.size();
 
 	for (size_t i = 0; i < iSize; ++i)
@@ -714,6 +936,24 @@ void CTransform::SetWorldRot(float x, float y, float z)
 
 	m_bUpdateRot = true;
 
+	Matrix matRot;
+
+	matRot.Rotation(m_vRelativeRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vRelativeAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vRelativeAxis[i].Normalize();
+	}
+
+	matRot.Rotation(m_vWorldRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vWorldAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vWorldAxis[i].Normalize();
+	}
+
 	size_t iSize = m_vecChild.size();
 
 	for (size_t i = 0; i < iSize; ++i)
@@ -737,6 +977,24 @@ void CTransform::SetWorldRotX(float x)
 	}
 
 	m_bUpdateRot = true;
+
+	Matrix matRot;
+
+	matRot.Rotation(m_vRelativeRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vRelativeAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vRelativeAxis[i].Normalize();
+	}
+
+	matRot.Rotation(m_vWorldRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vWorldAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vWorldAxis[i].Normalize();
+	}
 
 	size_t iSize = m_vecChild.size();
 
@@ -762,6 +1020,24 @@ void CTransform::SetWorldRotY(float y)
 
 	m_bUpdateRot = true;
 
+	Matrix matRot;
+
+	matRot.Rotation(m_vRelativeRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vRelativeAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vRelativeAxis[i].Normalize();
+	}
+
+	matRot.Rotation(m_vWorldRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vWorldAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vWorldAxis[i].Normalize();
+	}
+
 	size_t iSize = m_vecChild.size();
 
 	for (size_t i = 0; i < iSize; ++i)
@@ -786,6 +1062,24 @@ void CTransform::SetWorldRotZ(float z)
 
 	m_bUpdateRot = true;
 
+	Matrix matRot;
+
+	matRot.Rotation(m_vRelativeRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vRelativeAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vRelativeAxis[i].Normalize();
+	}
+
+	matRot.Rotation(m_vWorldRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vWorldAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vWorldAxis[i].Normalize();
+	}
+
 	size_t iSize = m_vecChild.size();
 
 	for (size_t i = 0; i < iSize; ++i)
@@ -808,7 +1102,7 @@ void CTransform::SetWorldPos(const Vector3& v)
 
 		tMat.Rotation(m_pParent->GetWorldRot());
 
-		memcpy(&tMat._41, &m_pParent->GetWorldPos(), sizeof(Vector3));
+		memcpy(&tMat._41, &m_pParent->GetWorldPos(), sizeof(float) * 3);
 
 		tMat.Inverse();
 
@@ -839,7 +1133,7 @@ void CTransform::SetWorldPos(float x, float y, float z)
 
 		tMat.Rotation(m_pParent->GetWorldRot());
 
-		memcpy(&tMat._41, &m_pParent->GetWorldPos(), sizeof(Vector3));
+		memcpy(&tMat._41, &m_pParent->GetWorldPos(), sizeof(float) * 3);
 
 		tMat.Inverse();
 
@@ -920,6 +1214,24 @@ void CTransform::AddWorldRot(const Vector3& v)
 
 	m_bUpdateRot = true;
 
+	Matrix matRot;
+
+	matRot.Rotation(m_vRelativeRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vRelativeAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vRelativeAxis[i].Normalize();
+	}
+
+	matRot.Rotation(m_vWorldRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vWorldAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vWorldAxis[i].Normalize();
+	}
+
 	size_t iSize = m_vecChild.size();
 
 	for (size_t i = 0; i < iSize; ++i)
@@ -950,6 +1262,24 @@ void CTransform::AddWorldRot(float x, float y, float z)
 
 	m_bUpdateRot = true;
 
+	Matrix matRot;
+
+	matRot.Rotation(m_vRelativeRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vRelativeAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vRelativeAxis[i].Normalize();
+	}
+
+	matRot.Rotation(m_vWorldRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vWorldAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vWorldAxis[i].Normalize();
+	}
+
 	size_t iSize = m_vecChild.size();
 
 	for (size_t i = 0; i < iSize; ++i)
@@ -973,6 +1303,24 @@ void CTransform::AddWorldRotX(float x)
 	}
 
 	m_bUpdateRot = true;
+
+	Matrix matRot;
+
+	matRot.Rotation(m_vRelativeRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vRelativeAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vRelativeAxis[i].Normalize();
+	}
+
+	matRot.Rotation(m_vWorldRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vWorldAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vWorldAxis[i].Normalize();
+	}
 
 	size_t iSize = m_vecChild.size();
 
@@ -998,6 +1346,24 @@ void CTransform::AddWorldRotY(float y)
 
 	m_bUpdateRot = true;
 
+	Matrix matRot;
+
+	matRot.Rotation(m_vRelativeRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vRelativeAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vRelativeAxis[i].Normalize();
+	}
+
+	matRot.Rotation(m_vWorldRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vWorldAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vWorldAxis[i].Normalize();
+	}
+
 	size_t iSize = m_vecChild.size();
 
 	for (size_t i = 0; i < iSize; ++i)
@@ -1022,6 +1388,24 @@ void CTransform::AddWorldRotZ(float z)
 
 	m_bUpdateRot = true;
 
+	Matrix matRot;
+
+	matRot.Rotation(m_vRelativeRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vRelativeAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vRelativeAxis[i].Normalize();
+	}
+
+	matRot.Rotation(m_vWorldRot);
+
+	for (int i = 0; i < AXIS_END; ++i)
+	{
+		m_vWorldAxis[i] = Vector3::Axis[i].TranslationNorm(matRot);
+		m_vWorldAxis[i].Normalize();
+	}
+
 	size_t iSize = m_vecChild.size();
 
 	for (size_t i = 0; i < iSize; ++i)
@@ -1044,7 +1428,7 @@ void CTransform::AddWorldPos(const Vector3& v)
 
 		tMat.Rotation(m_pParent->GetWorldRot());
 
-		memcpy(&tMat._41, &m_pParent->GetWorldPos(), sizeof(Vector3));
+		memcpy(&tMat._41, &m_pParent->GetWorldPos(), sizeof(float)*3);
 
 		tMat.Inverse();
 
@@ -1075,7 +1459,7 @@ void CTransform::AddWorldPos(float x, float y, float z)
 
 		tMat.Rotation(m_pParent->GetWorldRot());
 
-		memcpy(&tMat._41, &m_pParent->GetWorldPos(), sizeof(Vector3));
+		memcpy(&tMat._41, &m_pParent->GetWorldPos(), sizeof(float) * 3);
 
 		tMat.Inverse();
 
@@ -1090,4 +1474,19 @@ void CTransform::AddWorldPos(float x, float y, float z)
 	{
 		m_vecChild[i]->InheritPos();
 	}
+}
+
+void CTransform::SetPivot(const Vector3& v)
+{
+	m_vPivot = v;
+}
+
+void CTransform::SetPivot(float x, float y, float z)
+{
+	SetPivot(Vector3(x,y,z));
+}
+
+void CTransform::SetMeshSize(const Vector3& v)
+{
+	m_vMeshSize = v;
 }

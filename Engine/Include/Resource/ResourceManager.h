@@ -21,8 +21,6 @@ public:
 public:
 	class CMaterial* FindMaterial(const std::string& strName);
 	void ReleaseMaterial(const std::string& strName);
-
-public:
 	CMaterial* CreateMaterial(const std::string& strName);
 
 	DECLARE_SINGLE(CResourceManager)

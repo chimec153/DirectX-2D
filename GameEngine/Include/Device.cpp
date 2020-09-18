@@ -13,7 +13,8 @@ CDevice::CDevice()	:
 {
 	memset(m_pClearColor, 0, sizeof(float) * 4);
 
-	m_pClearColor[2] = 1.f;
+	m_pClearColor[1] = 0.1f;
+	m_pClearColor[2] = 0.1f;
 }
 
 CDevice::~CDevice()

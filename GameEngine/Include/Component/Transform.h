@@ -16,6 +16,7 @@ private:
 	class CSceneComponent*		m_pOwner;
 	CTransform*					m_pParent;
 	std::vector<CTransform*>	m_vecChild;
+	TransformCBuffer			m_tCBuffer;
 
 private:
 	Vector3						m_vVelocityScale;
@@ -115,6 +116,9 @@ public:
 	void AddWorldRotZ(float z);
 	void AddWorldPos(const Vector3& v);
 	void AddWorldPos(float x, float y, float z);
+	void SetPivot(const Vector3& v);
+	void SetPivot(float x, float y, float z);
+	void SetMeshSize(const Vector3& v);
 
 private:
 	Matrix						m_matScale;

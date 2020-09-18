@@ -31,6 +31,7 @@ public:
 public:
 	virtual bool Init();
 	virtual void Start();
+	virtual void Input(float fTime);
 	virtual void Update(float fTime);
 	virtual void PostUpdate(float fTime);
 	virtual void Collision(float fTime);
@@ -39,6 +40,10 @@ public:
 	virtual void PostRender(float fTime);
 
 public:
+	void SetInheritScale(bool bInherit);
+	void SetInheritRotX(bool bInherit);
+	void SetInheritRotY(bool bInherit);
+	void SetInheritRotZ(bool bInherit);
 	void InheritScale();
 	void InheritRot();
 	void InheritPos();
@@ -91,6 +96,9 @@ public:
 	void AddWorldRotZ(float z);
 	void AddWorldPos(const Vector3& v);
 	void AddWorldPos(float x, float y, float z);
+	void SetPivot(const Vector3& v);
+	void SetPivot(float x, float y, float z);
+	void SetMeshSize(const Vector3& v);
 
 public:
 	template <typename T>

@@ -40,7 +40,7 @@ bool CResourceManager::Init()
 
 	CMaterial* pMaterial = CreateMaterial("Color");
 
-	pMaterial->SetShader("Stardard2D");
+	pMaterial->SetShader("Standard2D");
 
 	m_pDefaultMesh2D->SetMaterial(pMaterial);
 
@@ -105,12 +105,6 @@ CMaterial* CResourceManager::CreateMaterial(const std::string& strName)
 	pMaterial = new CMaterial;
 
 	pMaterial->SetName(strName);
-
-	if (!pMaterial->Init())
-	{
-		SAFE_RELEASE(pMaterial);
-		return nullptr;
-	}
 
 	pMaterial->AddRef();
 

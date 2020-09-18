@@ -10,6 +10,13 @@ protected:
 	CMeshComponent(const CMeshComponent& com);
 	virtual ~CMeshComponent();
 
+protected:
+	class CMaterial*		m_pMaterial;
+
+public:
+	void SetMaterial(class CMaterial* pMaterial);
+	class CMaterial* GetMaterial()	const;
+
 public:
 	virtual bool Init();
 	virtual void Start();
@@ -19,5 +26,6 @@ public:
 	virtual void PreRender(float fTime);
 	virtual void Render(float fTime);
 	virtual void PostRender(float fTime);
+
 };
 

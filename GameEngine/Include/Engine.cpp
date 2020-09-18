@@ -7,6 +7,7 @@
 #include "Resource/ShaderManager.h"
 #include "Resource/Shader.h"
 #include "Resource/Mesh2D.h"
+#include "RenderManager.h"
 
 DEFINITION_SINGLE(CEngine)
 
@@ -27,7 +28,8 @@ CEngine::~CEngine()
 	DESTROY_SINGLE(CSceneManager);
 	DESTROY_SINGLE(CTimer);
 	DESTROY_SINGLE(CPathManager);
-	DESTROY_SINGLE(CResourceManager);	
+	DESTROY_SINGLE(CResourceManager);
+	DESTROY_SINGLE(CRenderManager);
 }
 
 bool CEngine::Init(const TCHAR* strClass, const TCHAR* strTitle, HINSTANCE hInst, int iIcon, int iSmIcon, int iWidth, int iHeight, bool bWindowMode)
@@ -73,6 +75,10 @@ bool CEngine::Init(HINSTANCE hInst, HWND hWnd,
 	if (!GET_SINGLE(CSceneManager)->Init())
 		return false;
 
+	// 랜더 관리자 초기화
+	if (!GET_SINGLE(CRenderManager)->Init())
+		return false;
+
 	return true;
 }
 
@@ -102,12 +108,19 @@ void CEngine::Logic()
 
 	float fTime = GET_SINGLE(CTimer)->GetDeltaTime();
 
+	Input(fTime);
 	Update(fTime);
 	PostUpdate(fTime);
 	Collision(fTime);
 	PreRender(fTime);
 	Render(fTime);
 	PostRender(fTime);
+}
+
+int CEngine::Input(float fTime)
+{
+	GET_SINGLE(CSceneManager)->Input(fTime);
+	return 0;
 }
 
 int CEngine::Update(float fTime)
@@ -142,19 +155,11 @@ int CEngine::Render(float fTime)
 {
 	GET_SINGLE(CDevice)->ClearTarget();
 
-	GET_SINGLE(CSceneManager)->Render(fTime);
+	//GET_SINGLE(CSceneManager)->Render(fTime);
 
-	CShader* pShader = GET_SINGLE(CShaderManager)->FindShader("Standard2D");
+	GET_SINGLE(CRenderManager)->Render(fTime);
 
-	pShader->SetShader();
-
-	SAFE_RELEASE(pShader);
-
-	CMesh2D* pMesh = GET_SINGLE(CResourceManager)->GetDefaultMesh();
-
-	pMesh->Render(fTime);
-
-	SAFE_RELEASE(pMesh);
+	GET_SINGLE(CRenderManager)->Clear();
 
 	GET_SINGLE(CDevice)->Render();
 

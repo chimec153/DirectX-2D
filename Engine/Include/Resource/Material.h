@@ -18,15 +18,15 @@ private:
 
 public:
 	void SetShader(const std::string& strName);
+	void SetDiffuseColor(const Vector4& v);
+	void SetDiffuseColor(float x, float y, float z, float a);
+	void SetAmbientColor(const Vector4& v);
+	void SetAmbientColor(float x, float y, float z, float a);
+	void SetSpecularColor(const Vector4& v);
+	void SetSpecularColor(float x, float y, float z, float a);
 
 public:
-	bool Init();
-	void Start();
-	void Update(float fTime);
-	void PostUpdate(float fTime);
-	void Collision(float fTime);
-	void PreRender(float fTime);
 	void Render(float fTime);
-	void PostRender(float fTime);
+	CMaterial* Clone();
 };
 

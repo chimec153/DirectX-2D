@@ -2,18 +2,19 @@
 
 #include "Object/GameObject.h"
 
-class CPlayer :
+class CBullet :
 	public CGameObject
 {
 public:
-	CPlayer();
-	CPlayer(const CPlayer& player);
-	virtual ~CPlayer();
+	CBullet();
+	CBullet(const CBullet& bullet);
+	virtual ~CBullet();
 
 private:
-	class CMesh2DComponent*			m_pMesh;
-	class CMesh2DComponent*			m_pChildMesh;
-	float							m_fSpeed;
+	float						m_fSpeed;
+	float						m_fDist;
+	float						m_fLimitDist;
+	class CMesh2DComponent*		m_pMesh;
 
 public:
 	virtual bool Init();

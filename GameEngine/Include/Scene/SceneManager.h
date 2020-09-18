@@ -12,6 +12,7 @@ private:
 public:
 	bool Init();
 	void Start();
+	int Input(float fTime);
 	int Update(float fTime);
 	int PostUpdate(float fTime);
 	int Collision(float fTime);

@@ -31,6 +31,37 @@ void CScene::Start()
 	}
 }
 
+void CScene::Input(float fTime)
+{
+	std::list<CGameObject*>::iterator iter = m_ObjList.begin();
+	std::list<CGameObject*>::iterator iterEnd = m_ObjList.end();
+
+	for (; iter != iterEnd;)
+	{
+		if (!(*iter)->IsActive())
+		{
+			SAFE_RELEASE((*iter));
+			iter = m_ObjList.erase(iter);
+			iterEnd = m_ObjList.end();
+			continue;
+		}
+
+		else if (!(*iter)->IsEnable())
+		{
+			++iter;
+			continue;
+		}
+
+		else if (!(*iter)->IsStart())
+		{
+			(*iter)->Start();
+		}
+
+		(*iter)->Input(fTime);
+		++iter;
+	}
+}
+
 void CScene::Update(float fTime)
 {
 	std::list<CGameObject*>::iterator iter = m_ObjList.begin();
@@ -43,6 +74,7 @@ void CScene::Update(float fTime)
 			SAFE_RELEASE((*iter));
 			iter = m_ObjList.erase(iter);
 			iterEnd = m_ObjList.end();
+			continue;
 		}
 
 		else if (!(*iter)->IsEnable())
@@ -73,6 +105,7 @@ void CScene::PostUpdate(float fTime)
 			SAFE_RELEASE((*iter));
 			iter = m_ObjList.erase(iter);
 			iterEnd = m_ObjList.end();
+			continue;
 		}
 
 		else if (!(*iter)->IsEnable())
@@ -103,6 +136,7 @@ void CScene::Collision(float fTime)
 			SAFE_RELEASE((*iter));
 			iter = m_ObjList.erase(iter);
 			iterEnd = m_ObjList.end();
+			continue;
 		}
 
 		else if (!(*iter)->IsEnable())
@@ -133,6 +167,7 @@ void CScene::PreRender(float fTime)
 			SAFE_RELEASE((*iter));
 			iter = m_ObjList.erase(iter);
 			iterEnd = m_ObjList.end();
+			continue;
 		}
 
 		else if (!(*iter)->IsEnable())
@@ -163,6 +198,7 @@ void CScene::Render(float fTime)
 			SAFE_RELEASE((*iter));
 			iter = m_ObjList.erase(iter);
 			iterEnd = m_ObjList.end();
+			continue;
 		}
 
 		else if (!(*iter)->IsEnable())
@@ -193,6 +229,7 @@ void CScene::PostRender(float fTime)
 			SAFE_RELEASE((*iter));
 			iter = m_ObjList.erase(iter);
 			iterEnd = m_ObjList.end();
+			continue;
 		}
 
 		else if (!(*iter)->IsEnable())

@@ -12,10 +12,13 @@ public:
 
 private:
 	class CMesh2DComponent*			m_pMesh;
+	class CMesh2DComponent*			m_pChildMesh;
+	float							m_fSpeed;
 
 public:
 	virtual bool Init();
 	virtual void Start();
+	virtual void Input(float fTime);
 	virtual void Update(float fTime);
 	virtual void PostUpdate(float fTime);
 	virtual void Collision(float fTime);

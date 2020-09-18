@@ -7,6 +7,7 @@ class CShaderManager
 private:
 	std::unordered_map<std::string, ID3D11InputLayout*>	m_mapInputLayout;
 	std::unordered_map<std::string, class CShader*>		m_mapShader;
+	std::unordered_map<std::string, PCBuffer>				m_mapCBuffer;
 
 public:
 	bool Init();
@@ -20,6 +21,14 @@ public:
 
 	ID3D11InputLayout* FindInputLayout(const std::string& strName);
 	void ReleaseInputLayout(const std::string& strName);
+
+public:
+	bool CreateCBuffer(const std::string& strTag, int iSize, int iRegister,
+		int iType = ((int)SHADER_CBUFFER_TYPE::CBUFFER_VERTEX) | (int)SHADER_CBUFFER_TYPE::CBUFFER_PIXEL);
+	bool UpdateCBuffer(const std::string& strTag, void* pData);
+
+private:
+	PCBuffer FindCBuffer(const std::string& strTag);
 
 public:
 	template <typename T>

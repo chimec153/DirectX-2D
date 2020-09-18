@@ -48,6 +48,10 @@ void CGameObject::Start()
 		m_vecObjectComponent[i]->Start();
 }
 
+void CGameObject::Input(float fTime)
+{
+}
+
 void CGameObject::Update(float fTime)
 {
 	m_pRootComponent->Update(fTime);
@@ -106,6 +110,26 @@ void CGameObject::PostRender(float fTime)
 
 	for (size_t i = 0; i < iSize; ++i)
 		m_vecObjectComponent[i]->PostRender(fTime);
+}
+
+void CGameObject::SetInheritScale(bool bInherit)
+{
+	m_pRootComponent->SetInheritScale(bInherit);
+}
+
+void CGameObject::SetInheritRotX(bool bInherit)
+{
+	m_pRootComponent->SetInheritRotX(bInherit);
+}
+
+void CGameObject::SetInheritRotY(bool bInherit)
+{
+	m_pRootComponent->SetInheritRotY(bInherit);
+}
+
+void CGameObject::SetInheritRotZ(bool bInherit)
+{
+	m_pRootComponent->SetInheritRotZ(bInherit);
 }
 
 void CGameObject::InheritScale()
@@ -346,4 +370,19 @@ void CGameObject::AddWorldPos(const Vector3 & v)
 void CGameObject::AddWorldPos(float x, float y, float z)
 {
 	m_pRootComponent->AddWorldPos(x, y, z);
+}
+
+void CGameObject::SetPivot(const Vector3& v)
+{
+	m_pRootComponent->SetPivot(v);
+}
+
+void CGameObject::SetPivot(float x, float y, float z)
+{
+	m_pRootComponent->SetPivot(x,y,z);
+}
+
+void CGameObject::SetMeshSize(const Vector3& v)
+{
+	m_pRootComponent->SetMeshSize(v);
 }

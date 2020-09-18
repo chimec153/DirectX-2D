@@ -36,6 +36,7 @@ protected:
 
 public:
 	void SetMaterial(class CMaterial* pMaterial);
+	class CMaterial* GetMaterial()	const;
 
 public:
 	Vector3 GetMax()	const

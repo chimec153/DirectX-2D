@@ -11,7 +11,17 @@ protected:
 	virtual ~CSceneComponent();
 
 protected:
-	class CTransform*		m_pTransform;
+	class CTransform*					m_pTransform;
+	SCENE_COMPONENT_TYPE				m_eSceneComponentType;
+	CSceneComponent*					m_pParent;
+	std::vector<CSceneComponent*>		m_vecChild;
+
+public:
+	class CTransform* GetTransform()	const;
+	SCENE_COMPONENT_TYPE GetSceneComponentType()	const;
+	void AddChild(CSceneComponent* pComponent);
+	void DeleteChild(CSceneComponent* pComponent);
+	void Detach(CSceneComponent* pComponent);
 
 public:
 	virtual bool Init();
@@ -22,8 +32,13 @@ public:
 	virtual void PreRender(float fTime);
 	virtual void Render(float fTime);
 	virtual void PostRender(float fTime);
+	CSceneComponent* Clone();
 
 public:
+	void SetInheritScale(bool bInherit);
+	void SetInheritRotX(bool bInherit);
+	void SetInheritRotY(bool bInherit);
+	void SetInheritRotZ(bool bInherit);
 	void InheritScale();
 	void InheritRot();
 	void InheritPos();
@@ -76,6 +91,9 @@ public:
 	void AddWorldRotZ(float z);
 	void AddWorldPos(const Vector3& v);
 	void AddWorldPos(float x, float y, float z);
+	void SetPivot(const Vector3& v);
+	void SetPivot(float x, float y, float z);
+	void SetMeshSize(const Vector3& v);
 };
 
 

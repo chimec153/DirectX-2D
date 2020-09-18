@@ -30,6 +30,12 @@ void CSceneManager::Start()
 	m_pScene->Start();
 }
 
+int CSceneManager::Input(float fTime)
+{
+	m_pScene->Input(fTime);
+	return 0;
+}
+
 int CSceneManager::Update(float fTime)
 {
 	m_pScene->Update(fTime);

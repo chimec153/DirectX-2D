@@ -13,6 +13,11 @@ CMaterial::CMaterial()	:
 CMaterial::CMaterial(const CMaterial& material)
 {
 	*this = material;
+
+	m_iRefCount = 1;
+
+	if (m_pShader)
+		m_pShader->AddRef();
 }
 
 CMaterial::~CMaterial()
@@ -27,35 +32,45 @@ void CMaterial::SetShader(const std::string& strName)
 	m_pShader = GET_SINGLE(CShaderManager)->FindShader(strName);
 }
 
-bool CMaterial::Init()
+void CMaterial::SetDiffuseColor(const Vector4& v)
 {
-	return true;
+	m_tCBuffer.vDif = v;
 }
 
-void CMaterial::Start()
+void CMaterial::SetDiffuseColor(float x, float y, float z, float a)
 {
+	SetDiffuseColor(Vector4(x, y, z, a));
 }
 
-void CMaterial::Update(float fTime)
+void CMaterial::SetAmbientColor(const Vector4& v)
 {
+	m_tCBuffer.vEmb = v;
 }
 
-void CMaterial::PostUpdate(float fTime)
+void CMaterial::SetAmbientColor(float x, float y, float z, float a)
 {
+	SetAmbientColor(Vector4(x, y, z, a));
 }
 
-void CMaterial::Collision(float fTime)
+void CMaterial::SetSpecularColor(const Vector4 & v)
 {
+	m_tCBuffer.vSpec = v;
 }
 
-void CMaterial::PreRender(float fTime)
+void CMaterial::SetSpecularColor(float x, float y, float z, float a)
 {
+	SetSpecularColor(Vector4(x, y, z, a));
 }
 
 void CMaterial::Render(float fTime)
 {
+	if (m_pShader)
+		m_pShader->SetShader();
+
+	GET_SINGLE(CShaderManager)->UpdateCBuffer("Material", &m_tCBuffer);
 }
 
-void CMaterial::PostRender(float fTime)
+CMaterial* CMaterial::Clone()
 {
+	return new CMaterial(*this);
 }

@@ -39,9 +39,30 @@ typedef struct _tagVertexColor
 	Vector4	vColor;
 }VertexColor, * PVertexColor;
 
+typedef struct _tagTransformCBuffer
+{
+	Matrix		matWorld;
+	Matrix		matView;
+	Matrix		matProj;
+	Matrix		matWV;
+	Matrix		matWVP;
+	Vector3		vPivot;
+	//float		fEmpty1;
+	Vector3		vMeshSize;
+	//float		fEmpty2;
+}TransformCBuffer,*PTransformCBuffer;
+
 typedef struct _tagShaderCBuffer
 {
 	Vector4	vDif;
 	Vector4 vEmb;
 	Vector4 vSpec;
 }ShaderCBuffer, *PShaderCBuffer;
+
+typedef struct _tagCBuffer
+{
+	ID3D11Buffer*	pBuffer;
+	int				iSize;
+	int				iRegister;
+	int				iType;
+}CBuffer,*PCBuffer;

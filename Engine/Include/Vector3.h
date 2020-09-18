@@ -2,7 +2,7 @@
 
 #include "Matrix.h"
 
-typedef __declspec(align(16)) struct _tagVector3
+typedef struct __declspec(align(16)) _tagVector3
 {
 	float x, y, z;
 

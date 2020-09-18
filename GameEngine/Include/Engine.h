@@ -42,6 +42,7 @@ public:
 	void Logic();
 
 public:
+	int Input(float fTime);
 	int Update(float fTime);
 	int PostUpdate(float fTime);
 	int Collision(float fTime);

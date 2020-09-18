@@ -3,6 +3,7 @@
 #include "../Scene/Scene.h"
 #include "../Scene/SceneResource.h"
 #include "Transform.h"
+#include "../RenderManager.h"
 
 CSceneComponent::CSceneComponent()
 {
@@ -16,11 +17,81 @@ CSceneComponent::CSceneComponent(const CSceneComponent& com)	:
 	CComponent(com)
 {
 	m_pTransform = com.m_pTransform->Clone();
+
+	m_vecChild.clear();
+
+	size_t iSize = com.m_vecChild.size();
+
+	for (size_t i = 0; i < iSize; ++i)
+	{
+		CSceneComponent* pComponent = com.m_vecChild[i]->Clone();
+
+		pComponent->m_pParent = this;
+		pComponent->m_pTransform->m_pParent = m_pTransform;
+
+		m_vecChild.push_back(pComponent);
+		m_pTransform->m_vecChild.push_back(pComponent->m_pTransform);
+	}
 }
 
 CSceneComponent::~CSceneComponent()
 {
 	SAFE_DELETE(m_pTransform);
+	SAFE_RELEASE_VECLIST(m_vecChild);
+}
+
+CTransform* CSceneComponent::GetTransform() const
+{
+	return m_pTransform;
+}
+
+SCENE_COMPONENT_TYPE CSceneComponent::GetSceneComponentType() const
+{
+	return m_eSceneComponentType;
+}
+
+void CSceneComponent::AddChild(CSceneComponent* pComponent)
+{
+	pComponent->m_pParent = this;
+	pComponent->m_pTransform->m_pParent = m_pTransform;
+
+	pComponent->AddRef();
+
+	m_vecChild.push_back(pComponent);
+	m_pTransform->m_vecChild.push_back(pComponent->m_pTransform);
+
+	pComponent->InheritPos();
+	pComponent->InheritScale();
+	pComponent->InheritRot();
+}
+
+void CSceneComponent::DeleteChild(CSceneComponent* pComponent)
+{
+	size_t iSize = m_vecChild.size();
+
+	for (size_t i = 0; i < iSize; ++i)
+	{
+		if (m_vecChild[i] == pComponent)
+		{
+			Detach(pComponent);
+
+			std::vector<CSceneComponent*>::iterator iter = m_vecChild.begin() + i;
+
+			m_vecChild.erase(iter);
+
+			std::vector<CTransform*>::iterator iterTr = m_vecChild[i]->m_pTransform->m_vecChild.begin() + i;
+
+			m_pTransform->m_vecChild.erase(iterTr);
+		}
+	}
+}
+
+void CSceneComponent::Detach(CSceneComponent* pComponent)
+{
+	pComponent->m_pParent = nullptr;
+	pComponent->m_pTransform->m_pParent = nullptr;
+
+	pComponent->Release();
 }
 
 bool CSceneComponent::Init()
@@ -32,30 +103,182 @@ bool CSceneComponent::Init()
 
 void CSceneComponent::Start()
 {
+	std::vector<CSceneComponent*>::iterator iter = m_vecChild.begin();
+	std::vector<CSceneComponent*>::iterator iterEnd = m_vecChild.end();
+
+	for (; iter != iterEnd;++iter)
+		(*iter)->Start();
 }
 
 void CSceneComponent::Update(float fTime)
 {
+	std::vector<CSceneComponent*>::iterator iter = m_vecChild.begin();
+	std::vector<CSceneComponent*>::iterator iterEnd = m_vecChild.end();
+	std::vector<CTransform*>::iterator iterTr = m_pTransform->m_vecChild.begin();
+
+	for (; iter != iterEnd;)
+	{
+		if (!(*iter)->IsActive())
+		{
+			Detach((*iter));
+			iter = m_vecChild.erase(iter);
+			iterEnd = m_vecChild.end();
+			iterTr = m_pTransform->m_vecChild.erase(iterTr);
+			continue;
+		}
+
+		else if ((*iter)->IsEnable())
+		{
+			(*iter)->Update(fTime);
+		}
+
+		++iter;
+		++iterTr;
+	}
+
+	m_pTransform->Update(fTime);
 }
 
 void CSceneComponent::PostUpdate(float fTime)
 {
+	std::vector<CSceneComponent*>::iterator iter = m_vecChild.begin();
+	std::vector<CSceneComponent*>::iterator iterEnd = m_vecChild.end();
+	std::vector<CTransform*>::iterator iterTr = m_pTransform->m_vecChild.begin();
+
+	for (; iter != iterEnd;)
+	{
+		if (!(*iter)->IsActive())
+		{
+			Detach((*iter));
+			iter = m_vecChild.erase(iter);
+			iterEnd = m_vecChild.end();
+			iterTr = m_pTransform->m_vecChild.erase(iterTr);
+			continue;
+		}
+
+		else if ((*iter)->IsEnable())
+		{
+			(*iter)->PostUpdate(fTime);
+		}
+
+		++iter;
+		++iterTr;
+	}
+
+	m_pTransform->PostUpdate(fTime);
 }
 
 void CSceneComponent::Collision(float fTime)
 {
+	std::vector<CSceneComponent*>::iterator iter = m_vecChild.begin();
+	std::vector<CSceneComponent*>::iterator iterEnd = m_vecChild.end();
+	std::vector<CTransform*>::iterator iterTr = m_pTransform->m_vecChild.begin();
+
+	for (; iter != iterEnd;)
+	{
+		if (!(*iter)->IsActive())
+		{
+			Detach((*iter));
+			iter = m_vecChild.erase(iter);
+			iterEnd = m_vecChild.end();
+			iterTr = m_pTransform->m_vecChild.erase(iterTr);
+			continue;
+		}
+
+		else if ((*iter)->IsEnable())
+		{
+			(*iter)->Collision(fTime);
+		}
+
+		++iter;
+		++iterTr;
+	}
 }
 
 void CSceneComponent::PreRender(float fTime)
 {
+	GET_SINGLE(CRenderManager)->AddComponent(this);
+
+	std::vector<CSceneComponent*>::iterator iter = m_vecChild.begin();
+	std::vector<CSceneComponent*>::iterator iterEnd = m_vecChild.end();
+	std::vector<CTransform*>::iterator iterTr = m_pTransform->m_vecChild.begin();
+
+	for (; iter != iterEnd;)
+	{
+		if (!(*iter)->IsActive())
+		{
+			Detach((*iter));
+			iter = m_vecChild.erase(iter);
+			iterEnd = m_vecChild.end();
+			iterTr = m_pTransform->m_vecChild.erase(iterTr);
+			continue;
+		}
+
+		else if ((*iter)->IsEnable())
+		{
+			(*iter)->PreRender(fTime);
+		}
+
+		++iter;
+		++iterTr;
+	}
 }
 
 void CSceneComponent::Render(float fTime)
 {
+	m_pTransform->SetTransform();
 }
 
 void CSceneComponent::PostRender(float fTime)
 {
+	std::vector<CSceneComponent*>::iterator iter = m_vecChild.begin();
+	std::vector<CSceneComponent*>::iterator iterEnd = m_vecChild.end();
+	std::vector<CTransform*>::iterator iterTr = m_pTransform->m_vecChild.begin();
+
+	for (; iter != iterEnd;)
+	{
+		if (!(*iter)->IsActive())
+		{
+			Detach((*iter));
+			iter = m_vecChild.erase(iter);
+			iterEnd = m_vecChild.end();
+			iterTr = m_pTransform->m_vecChild.erase(iterTr);
+			continue;
+		}
+
+		else if ((*iter)->IsEnable())
+		{
+			(*iter)->PostRender(fTime);
+		}
+
+		++iter;
+		++iterTr;
+	}
+}
+
+CSceneComponent* CSceneComponent::Clone()
+{
+	return new CSceneComponent(*this);
+}
+
+void CSceneComponent::SetInheritScale(bool bInherit)
+{
+	m_pTransform->SetInheritScale(bInherit);
+}
+
+void CSceneComponent::SetInheritRotX(bool bInherit)
+{
+	m_pTransform->SetInheritRotX(bInherit);
+}
+
+void CSceneComponent::SetInheritRotY(bool bInherit)
+{
+	m_pTransform->SetInheritRotY(bInherit);
+}
+
+void CSceneComponent::SetInheritRotZ(bool bInherit)
+{
+	m_pTransform->SetInheritRotZ(bInherit);
 }
 
 void CSceneComponent::InheritScale()
@@ -296,4 +519,19 @@ void CSceneComponent::AddWorldPos(const Vector3 & v)
 void CSceneComponent::AddWorldPos(float x, float y, float z)
 {
 	m_pTransform->AddWorldPos(x, y, z);
+}
+
+void CSceneComponent::SetPivot(const Vector3& v)
+{
+	m_pTransform->SetPivot(v);
+}
+
+void CSceneComponent::SetPivot(float x, float y, float z)
+{
+	m_pTransform->SetPivot(x,y,z);
+}
+
+void CSceneComponent::SetMeshSize(const Vector3& v)
+{
+	m_pTransform->SetMeshSize(v);
 }
