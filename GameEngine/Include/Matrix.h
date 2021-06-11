@@ -21,7 +21,7 @@ typedef __declspec(align(16)) union _tagMatrix
 	_tagMatrix(const DirectX::XMMATRIX& m);
 	_tagMatrix(Vector4 v[4]);
 
-	_tagVector4 operator[] (int iIdx)	const;
+	_tagVector4& operator[] (int iIdx);
 
 	_tagMatrix operator=(const _tagMatrix& m);
 	_tagMatrix operator=(const DirectX::XMMATRIX& m);
@@ -47,7 +47,7 @@ typedef __declspec(align(16)) union _tagMatrix
 	void Rotation(float x, float y, float z);
 	void RotationX(float x);
 	void RotationY(float y);
-	void RotationZ(float z); 
+	void RotationZ(float z);
 	void RotationAxis(const struct _tagVector3& v, float fAngle);
 
 	static _tagMatrix StaticIdentity(const _tagMatrix& m);
@@ -63,7 +63,7 @@ typedef __declspec(align(16)) union _tagMatrix
 	static _tagMatrix StaticRotationX(float x);
 	static _tagMatrix StaticRotationY(float y);
 	static _tagMatrix StaticRotationZ(float z);
-	static _tagMatrix StaticRotationAxis(const struct _tagVector3& v , float fAngle);
+	static _tagMatrix StaticRotationAxis(const struct _tagVector3& v, float fAngle);
 
-}Matrix, *PMatrix;
+}Matrix, * PMatrix;
 

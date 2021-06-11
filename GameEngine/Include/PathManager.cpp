@@ -42,8 +42,10 @@ bool CPathManager::Init()
 
 	AddPath(TEXTURE_PATH, TEXT("Resource\\Texture\\"));
 	AddPath(DATA_PATH, TEXT("Data\\"));
-	AddPath(SOUND_PATH, TEXT("Resource\\Sound\\"));
+	AddPath(SOUND_PATH, TEXT("Sound\\"));
 	AddPath(SHADER_PATH, TEXT("Resource\\Shader\\"));
+	AddPath(RESOURCE_PATH, TEXT("Resource\\"));
+	AddPath(MESH_PATH, TEXT("Resource\\Mesh\\"));
 
 	return true;
 }

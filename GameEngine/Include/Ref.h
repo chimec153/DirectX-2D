@@ -6,6 +6,7 @@ class CRef
 {
 protected:
 	CRef();
+	CRef(const CRef& ref);
 	virtual ~CRef() = 0;
 
 protected:
@@ -45,9 +46,18 @@ public:
 		return m_strName;
 	}
 
+	int GetRef()	const;
+
 public:
 	void AddRef();
 	int Release();
 
+public:
+	virtual void Save(FILE* pFile);
+	virtual void Load(FILE* pFile);
+
+public:
+	virtual void ShowWindow();
 };
+
 

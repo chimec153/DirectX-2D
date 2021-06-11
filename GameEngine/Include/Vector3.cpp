@@ -1,5 +1,6 @@
 #include "Vector3.h"
 
+
 _tagVector3 _tagVector3::One(1.f, 1.f, 1.f);
 _tagVector3 _tagVector3::Zero(0.f, 0.f, 0.f);
 
@@ -101,7 +102,7 @@ bool _tagVector3::operator==(const DirectX::XMVECTOR& v) const
 {
 	_tagVector3 v1(v);
 
-	return v1.x == x && v1.y == y && v1.y == y;
+	return v1.x == x && v1.y == y && v1.z == z;
 }
 
 bool _tagVector3::operator!=(const _tagVector3& v) const
@@ -113,10 +114,10 @@ bool _tagVector3::operator!=(const DirectX::XMVECTOR& v) const
 {
 	_tagVector3 v1(v);
 
-	return v1.x != x || v1.y != y || v1.y != y;
+	return v1.x != x || v1.y != y || v1.z != z;
 }
 
-_tagVector3 _tagVector3::operator+(const _tagVector3& v) const
+const _tagVector3 _tagVector3::operator+(const _tagVector3& v) const
 {
 	DirectX::XMVECTOR v1 = Convert();
 	DirectX::XMVECTOR v2 = v.Convert();
@@ -124,14 +125,14 @@ _tagVector3 _tagVector3::operator+(const _tagVector3& v) const
 	return _tagVector3(v1 + v2);
 }
 
-_tagVector3 _tagVector3::operator+(const DirectX::XMVECTOR& v) const
+const _tagVector3 _tagVector3::operator+(const DirectX::XMVECTOR& v) const
 {
 	DirectX::XMVECTOR v1 = Convert();
 
 	return _tagVector3(v1 + v);
 }
 
-_tagVector3 _tagVector3::operator+(float f) const
+const _tagVector3 _tagVector3::operator+(float f) const
 {
 	return _tagVector3(x+f, y+f,z+f);
 }
@@ -168,19 +169,19 @@ _tagVector3 _tagVector3::operator+=(float f)
 	return *this;
 }
 
-_tagVector3 _tagVector3::operator-(const _tagVector3& v) const
+const _tagVector3 _tagVector3::operator-(const _tagVector3& v) const
 {
 	return _tagVector3(x - v.x, y - v.y, z - v.z);
 }
 
-_tagVector3 _tagVector3::operator-(const DirectX::XMVECTOR& v) const
+const _tagVector3 _tagVector3::operator-(const DirectX::XMVECTOR& v) const
 {
 	DirectX::XMVECTOR v1 = Convert();
 
 	return _tagVector3(v1 - v);
 }
 
-_tagVector3 _tagVector3::operator-(float f) const
+const _tagVector3 _tagVector3::operator-(float f) const
 {
 	return _tagVector3(x - f, y - f, z - f);
 }
@@ -214,19 +215,19 @@ _tagVector3 _tagVector3::operator-=(float f)
 	return *this;
 }
 
-_tagVector3 _tagVector3::operator*(const _tagVector3& v) const
+const _tagVector3 _tagVector3::operator*(const _tagVector3& v) const
 {
 	return _tagVector3(x * v.x, y * v.y, z * v.z);
 }
 
-_tagVector3 _tagVector3::operator*(const DirectX::XMVECTOR& v) const
+const _tagVector3 _tagVector3::operator*(const DirectX::XMVECTOR& v) const
 {
 	DirectX::XMVECTOR v1 = Convert();
-
-	return _tagVector3(v1 * v);
+	
+	return _tagVector3(DirectX::operator*(v1, v));
 }
 
-_tagVector3 _tagVector3::operator*(float f) const
+const _tagVector3 _tagVector3::operator*(float f) const
 {
 	return _tagVector3(x * f, y * f, z * f);
 }
@@ -260,25 +261,31 @@ _tagVector3 _tagVector3::operator*=(float f)
 	return *this;
 }
 
-_tagVector3 _tagVector3::operator/(const _tagVector3& v) const
+const _tagVector3 _tagVector3::operator/(const _tagVector3& v) const
 {
 	return _tagVector3(x / v.x, y / v.y, z / v.z);
 }
 
-_tagVector3 _tagVector3::operator/(const DirectX::XMVECTOR& v) const
+const _tagVector3 _tagVector3::operator/(const DirectX::XMVECTOR& v) const
 {
 	DirectX::XMVECTOR v1 = Convert();
 
 	return _tagVector3(v1/v);
 }
 
-_tagVector3 _tagVector3::operator/(float f) const
+const _tagVector3 _tagVector3::operator/(float f) const
 {
+	assert(f != 0.f);
+
 	return _tagVector3(x/f, y/f, z/f);
 }
 
-_tagVector3 _tagVector3::operator/=(const _tagVector3& v)
+_tagVector3& _tagVector3::operator/=(const _tagVector3& v)
 {
+	assert(v.x != 0.f);
+	assert(v.y != 0.f);
+	assert(v.z != 0.f);
+
 	x /= v.x;
 	y /= v.y;
 	z /= v.z;
@@ -286,24 +293,37 @@ _tagVector3 _tagVector3::operator/=(const _tagVector3& v)
 	return *this;
 }
 
-_tagVector3 _tagVector3::operator/=(const DirectX::XMVECTOR& v)
+_tagVector3& _tagVector3::operator/=(const DirectX::XMVECTOR& v)
 {
-	DirectX::XMVECTOR v1 = Convert();
+	_tagVector3 _v = v;
+	assert(_v.x != 0.f);
+	assert(_v.y != 0.f);
+	assert(_v.z != 0.f);
 
-	v1 /= v;
+	*this /= _v;
 
-	Convert(v1);
-
-	return _tagVector3(v1);
+	return *this;
 }
 
-_tagVector3 _tagVector3::operator/=(float f)
+_tagVector3& _tagVector3::operator/=(float f)
 {
+	assert(f != 0.f);
+
 	x /= f;
 	y /= f;
 	z /= f;
 
 	return *this;
+}
+
+const _tagVector3 _tagVector3::operator-()	const
+{
+	_tagVector3 v = *this;
+	v.x *= -1.f;
+	v.y *= -1.f;
+	v.z *= -1.f;
+
+	return v;
 }
 
 float _tagVector3::Length()	const
@@ -401,4 +421,9 @@ float _tagVector3::Distance(const _tagVector3& vSrc, const _tagVector3& vDest)
 	_tagVector3 v = vSrc - vDest;
 
 	return v.Length();
+}
+
+const _tagVector3 operator*(float f, const _tagVector3& v)
+{
+	return _tagVector3(f * v.x, f * v.y, f * v.z);
 }

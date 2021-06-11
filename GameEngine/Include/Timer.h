@@ -12,22 +12,22 @@ private:
 	int					m_iFrame;
 	float				m_fFPS;
 	float				m_fFrameTime;
+	GLOBALCBUFFER		m_tCBuffer;
 
 public:
-	float GetDeltaTime()	const
-	{
-		return m_fDeltaTime * m_fTimeScale;
-	}
-
-	float GetFPS()	const
-	{
-		return m_fFPS;
-	}
+	float GetDeltaTime()	const;
+	float GetFPS()	const;
+	float GetTotalTime()	const;
+	void SetTimeScale(float fScale);
 
 public:
 	bool Init();
 	void Update();
 
+public:
+	void ShowWindow();
+
 	DECLARE_SINGLE(CTimer)
 };
+
 

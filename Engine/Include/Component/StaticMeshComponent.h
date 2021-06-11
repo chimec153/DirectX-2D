@@ -1,11 +1,12 @@
 #pragma once
-#include "MeshComponent.h"
+#include "SceneComponent.h"
+
 class CStaticMeshComponent :
-	public CMeshComponent
+	public CSceneComponent
 {
 	friend class CGameObject;
 
-protected:
+public:
 	CStaticMeshComponent();
 	CStaticMeshComponent(const CStaticMeshComponent& com);
 	virtual ~CStaticMeshComponent();
@@ -19,5 +20,9 @@ public:
 	virtual void PreRender(float fTime);
 	virtual void Render(float fTime);
 	virtual void PostRender(float fTime);
-};
+	virtual std::shared_ptr<CComponent> Clone();
 
+public:
+	virtual void Save(FILE* pFile);
+	virtual void Load(FILE* pFile);
+};

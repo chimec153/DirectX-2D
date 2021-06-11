@@ -35,6 +35,15 @@
 		p.clear();\
 	}
 
+#define SAFE_DELETE_ARRAY_VECLIST(p)	\
+	{\
+		auto iter = p.begin();\
+		auto iterEnd = p.end();\
+		for(;iter!=iterEnd;++iter)\
+			SAFE_DELETE_ARRAY((*iter));\
+		p.clear();\
+	}
+
 #define SAFE_DELETE_MAP(p)	\
 	{\
 		auto iter = p.begin();\
@@ -62,16 +71,114 @@
 		p.clear();\
 	}
 
+
+template <typename T>
+static void Safe_Release_Map(T & p)
+{
+	typename T::iterator iter = p.begin();
+	typename T::iterator iterEnd = p.end();
+
+	for (; iter != iterEnd;)
+	{
+		SAFE_RELEASE(iter->second);
+		iter = p.erase(iter);
+		iterEnd = p.end();
+		continue;
+	}
+
+	p.clear();
+}
+
+template <typename T>
+static void Safe_Delete_Map(T& p)
+{
+	typename T::iterator iter = p.begin();
+	typename T::iterator iterEnd = p.end();
+
+	for (; iter != iterEnd;)
+	{
+		SAFE_DELETE(iter->second);
+		iter = p.erase(iter);
+		iterEnd = p.end();
+		continue;
+	}
+
+	p.clear();
+}
+
+template <typename T>
+static void Safe_Release_VecList(T& p)
+{
+	typename T::iterator iter = p.begin();
+	typename T::iterator iterEnd = p.end();
+
+	for (; iter != iterEnd;)
+	{
+		SAFE_RELEASE((*iter));
+		iter = p.erase(iter);
+		iterEnd = p.end();
+		continue;
+	}
+
+	p.clear();
+}
+
+template <typename T>
+static void Safe_Delete_VecList(T& p)
+{
+	typename T::iterator iter = p.begin();
+	typename T::iterator iterEnd = p.end();
+
+	for (; iter != iterEnd;)
+	{
+		SAFE_DELETE((*iter));
+		iter = p.erase(iter);
+		iterEnd = p.end();
+		continue;
+	}
+
+	p.clear();
+}
+
 #define TEXTURE_PATH	"Texture_Path"
 #define DATA_PATH		"Data_Path"
 #define ROOT_PATH		"Root_Path"
 #define SOUND_PATH		"Sound_Path"
 #define SHADER_PATH		"Shader_Path"
+#define RESOURCE_PATH	"Resource_Path"
+#define MESH_PATH		"Mesh_Path"
 
-#define DEVICE	GET_SINGLE(CDevice)->GetDevice()
-#define CONTEXT	GET_SINGLE(CDevice)->GetContext()
+#define DEVICE		GET_SINGLE(CDevice)->GetDevice()
+#define CONTEXT		GET_SINGLE(CDevice)->GetContext()
 #define SWAPSHAIN	GET_SINGLE(CDevice)->GetSwapChain()
 #define RESOLUTION	GET_SINGLE(CDevice)->GetResolution()
+#define WINHANDLE	GET_SINGLE(CEngine)->GetWindowHandle()
+#define RATIO		GET_SINGLE(CDevice)->GetWindowRatio()
+#define FACTORY2D	GET_SINGLE(CDevice)->Get2DFactory()
+#define TARGET2D	GET_SINGLE(CDevice)->Get2DRenderTarget()
+
+#define TERRAIN_LAYER	"Terrain_Layer"
+#define	OUTLINE_LAYER	"OutLine_Layer"
+#define ALBEDO_LAYER	"Albedo_Layer"
+#define COLLIDER_LAYER	"Collider_Layer"
+#define DECAL_LAYER		"Decal_Layer"
+#define GBUFFER_LAYER	"Gbuffer_Layer"
+#define CUBEMAP_LAYER	"Cubemap_Layer"
+#define ALPHA_LAYER		"Alpha_Layer"
+#define SWORD_LIGHT_LAYER	"SwordLight_Layer"
+#define PARTICLE_LAYER	"Particle_Layer"
+#define UI_LAYER		"UI_Layer"
+
+#define ALPHA_BLEND		"AlphaBlend"
+#define CULL_NONE		"NoCullRS"
+#define NO_DEPTH		"NoDepth"
+#define	WIRE_FRAME		"Wire"
+#define LESS_EQUAL_DSS	"LessEqualDss"
+
+#define STANDARD2D_SHADER	"Standard2D"
+#define STANDARD3D_SHADER	"Standard3D"
+
+#define MSG_SIZE	1024
 
 #define _CRTDBG_MAP_ALLOC
 

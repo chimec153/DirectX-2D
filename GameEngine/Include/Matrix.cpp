@@ -22,7 +22,7 @@ _tagMatrix::_tagMatrix(Vector4 _v[4])
 		v[i] = _v[i];
 }
 
-_tagVector4 _tagMatrix::operator[](int iIdx)	const
+_tagVector4& _tagMatrix::operator[](int iIdx)
 {
 	return v[iIdx];
 }
@@ -92,7 +92,8 @@ void _tagMatrix::Identity()
 
 void _tagMatrix::Inverse()
 {
-	m = DirectX::XMMatrixInverse(&DirectX::XMMatrixDeterminant(m), m);
+	DirectX::XMVECTOR v =DirectX::XMMatrixDeterminant(m);
+	m = DirectX::XMMatrixInverse(&v, m);
 }
 
 void _tagMatrix::Transpose()

@@ -17,6 +17,12 @@ _tagVector2::_tagVector2(const DirectX::XMVECTOR& v)
 	DirectX::XMStoreFloat2((DirectX::XMFLOAT2*)this, v);
 }
 
+_tagVector2::_tagVector2(const POINT& pt)	:
+	x((float)pt.x),
+	y((float)pt.y)
+{
+}
+
 _tagVector2::_tagVector2(float x, float y)	:
 	x(x),
 	y(y)
@@ -68,6 +74,14 @@ _tagVector2& _tagVector2::operator=(const DirectX::XMVECTOR& v)
 	return *this;
 }
 
+_tagVector2& _tagVector2::operator=(const POINT& pt)
+{
+	x = (float)pt.x;
+	y = (float)pt.y;
+
+	return *this;
+}
+
 _tagVector2& _tagVector2::operator=(float f)
 {
 	x = f;
@@ -112,6 +126,11 @@ _tagVector2 _tagVector2::operator+(const DirectX::XMVECTOR& v) const
 	return _tagVector2(v1 + v);
 }
 
+_tagVector2 _tagVector2::operator+(const POINT& pt) const
+{
+	return _tagVector2(x +pt.x, y+pt.y);
+}
+
 _tagVector2 _tagVector2::operator+(float f) const
 {
 	return _tagVector2(x + f, y + f);
@@ -136,6 +155,14 @@ _tagVector2 _tagVector2::operator+=(const DirectX::XMVECTOR& v)
 	return *this;
 }
 
+_tagVector2 _tagVector2::operator+=(const POINT& pt)
+{
+	x += pt.x;
+	y += pt.y;
+
+	return *this;
+}
+
 _tagVector2 _tagVector2::operator+=(float f)
 {
 	x += f;
@@ -153,6 +180,11 @@ _tagVector2 _tagVector2::operator-(const DirectX::XMVECTOR& v) const
 	DirectX::XMVECTOR v1 = Convert();
 
 	return _tagVector2(v1 - v);
+}
+
+_tagVector2 _tagVector2::operator-(const POINT& pt) const
+{
+	return _tagVector2(x -pt.x, y -pt.y);
 }
 
 _tagVector2 _tagVector2::operator-(float f) const
@@ -179,6 +211,14 @@ _tagVector2 _tagVector2::operator-=(const DirectX::XMVECTOR& v)
 	return *this;
 }
 
+_tagVector2 _tagVector2::operator-=(const POINT& pt)
+{
+	x -= pt.x;
+	y -= pt.y;
+
+	return *this;
+}
+
 _tagVector2 _tagVector2::operator-=(float f)
 {
 	x -= f;
@@ -197,6 +237,11 @@ _tagVector2 _tagVector2::operator*(const DirectX::XMVECTOR& v) const
 	DirectX::XMVECTOR v1 = Convert();
 
 	return _tagVector2(v1 * v);
+}
+
+_tagVector2 _tagVector2::operator*(const POINT& pt) const
+{
+	return _tagVector2(x * pt.x, y * pt.y);
 }
 
 _tagVector2 _tagVector2::operator*(float f) const
@@ -223,6 +268,14 @@ _tagVector2 _tagVector2::operator*=(const DirectX::XMVECTOR& v)
 	return *this;
 }
 
+_tagVector2 _tagVector2::operator*=(const POINT& pt)
+{
+	x *= pt.x;
+	y *= pt.y;
+
+	return *this;
+}
+
 _tagVector2 _tagVector2::operator*=(float f)
 {
 	x *= f;
@@ -241,6 +294,11 @@ _tagVector2 _tagVector2::operator/(const DirectX::XMVECTOR& v) const
 	DirectX::XMVECTOR v1 = Convert();
 
 	return _tagVector2(v1 / v);
+}
+
+_tagVector2 _tagVector2::operator/(const POINT& pt) const
+{
+	return _tagVector2(x / pt.x, y / pt.y);
 }
 
 _tagVector2 _tagVector2::operator/(float f) const
@@ -263,6 +321,14 @@ _tagVector2 _tagVector2::operator/=(const DirectX::XMVECTOR& v)
 	v1 /= v;
 
 	Convert(v1);
+
+	return *this;
+}
+
+_tagVector2 _tagVector2::operator/=(const POINT& pt)
+{
+	x /= pt.x;
+	y /= pt.y;
 
 	return *this;
 }
@@ -291,7 +357,7 @@ float _tagVector2::Angle(const _tagVector2& v)
 
 	float fAngle = acosf(fDot);
 
-	return RadToDeg(fDot);
+	return RadToDeg(fAngle);
 }
 
 float _tagVector2::AngleAxis()
@@ -338,4 +404,9 @@ void _tagVector2::Convert(const DirectX::XMVECTOR& v)
 DirectX::XMVECTOR _tagVector2::Convert() const
 {
 	return DirectX::XMLoadFloat2((DirectX::XMFLOAT2*)this);
+}
+
+const _tagVector2 operator*(float f, const _tagVector2& v)
+{
+	return _tagVector2(f * v.x, f*v.y);
 }

@@ -1,7 +1,8 @@
 #include "Device.h"
-
+#include "CameraManager.h"
+#include "Component/Camera.h"
+ID3D10Multithread* CDevice::m_pThread = nullptr;
 DEFINITION_SINGLE(CDevice)
-
 CDevice::CDevice()	:
 	m_pDevice(nullptr),
 	m_pContext(nullptr),
@@ -13,12 +14,14 @@ CDevice::CDevice()	:
 {
 	memset(m_pClearColor, 0, sizeof(float) * 4);
 
-	m_pClearColor[1] = 0.1f;
-	m_pClearColor[2] = 0.1f;
+	//m_pClearColor[0] = 0.01f;
+	//m_pClearColor[2] = 0.1f;
 }
 
 CDevice::~CDevice()
 {
+	SAFE_RELEASE(m_p2DFactory);
+	SAFE_RELEASE(m_p2DRenderTarget);
 	SAFE_RELEASE(m_pSwapChain);
 	SAFE_RELEASE(m_pTargetView);
 	SAFE_RELEASE(m_pDepthView);
@@ -28,6 +31,51 @@ CDevice::~CDevice()
 
 	SAFE_RELEASE(m_pContext);
 	SAFE_RELEASE(m_pDevice);
+	SAFE_RELEASE(m_pThread);
+}
+
+ID3D11Device* CDevice::GetDevice() const
+{
+	return m_pDevice;
+}
+
+ID3D11DeviceContext* CDevice::GetContext() const
+{
+	return m_pContext;
+}
+
+IDXGISwapChain* CDevice::GetSwapChain() const
+{
+	return m_pSwapChain;
+}
+
+Resolution CDevice::GetResolution() const
+{
+	return m_tRS;
+}
+
+Vector2 CDevice::GetWindowRatio() const
+{
+	RECT tRC = {};
+
+	GetClientRect(m_hWnd, &tRC);	
+
+	return Vector2((tRC.right - tRC.left) / (float)m_tRS.iWidth, (tRC.bottom - tRC.top) / (float)m_tRS.iHeight);
+}
+
+ID2D1Factory* CDevice::Get2DFactory() const
+{
+	return m_p2DFactory;
+}
+
+ID2D1RenderTarget* CDevice::Get2DRenderTarget() const
+{
+	return m_p2DRenderTarget;
+}
+
+ID3D10Multithread* CDevice::GetThread() const
+{
+	return m_pThread;
 }
 
 bool CDevice::Init(HWND hWnd, int iWidth, int iHeight, bool bWindowMode)
@@ -105,12 +153,33 @@ bool CDevice::Init(HWND hWnd, int iWidth, int iHeight, bool bWindowMode)
 	m_pContext->OMSetRenderTargets(1,&m_pTargetView,m_pDepthView);
 
 	D3D11_VIEWPORT tVF = {};
-
+	tVF.TopLeftX = 0.f;
+	tVF.TopLeftY = 0.f;
 	tVF.Width = (float)iWidth;
 	tVF.Height = (float)iHeight;
 	tVF.MaxDepth = 1.f;
 	
 	m_pContext->RSSetViewports(1, &tVF);
+
+	IDXGISurface* pBackSurface = nullptr;
+
+	if(FAILED(m_pSwapChain->GetBuffer(0, IID_PPV_ARGS(&pBackSurface))))
+		return false;
+
+	if (FAILED(D2D1CreateFactory(D2D1_FACTORY_TYPE_MULTI_THREADED, &m_p2DFactory)))
+		return false;
+
+	D2D1_RENDER_TARGET_PROPERTIES props = D2D1::RenderTargetProperties(D2D1_RENDER_TARGET_TYPE_HARDWARE,
+		D2D1::PixelFormat(DXGI_FORMAT_UNKNOWN, D2D1_ALPHA_MODE_PREMULTIPLIED));
+
+	if (FAILED(m_p2DFactory->CreateDxgiSurfaceRenderTarget(pBackSurface, props, &m_p2DRenderTarget)))
+		return false;
+
+	SAFE_RELEASE(pBackSurface);
+
+	CONTEXT->QueryInterface(&m_pThread);
+
+	m_pThread->SetMultithreadProtected(TRUE);
 
 	return true;
 }
@@ -125,4 +194,38 @@ void CDevice::ClearTarget()
 void CDevice::Render()
 {
 	m_pSwapChain->Present(0, 0);
+}
+
+void CDevice::SetTarget()
+{
+	m_pThread->Enter();
+	m_pContext->OMSetRenderTargets(1, &m_pTargetView, m_pDepthView);
+	m_pThread->Leave();
+}
+
+void CDevice::OnResize()
+{
+	//D3DApp::OnResize();
+	///*
+	//Vector2 vRatio = GetWindowRatio();
+	//float fRatio = vRatio.x / vRatio.y;
+	//XMMATRIX P = XMMatrixPerspectiveFovLH(0.25f * DirectX::XM_PI, 
+	//	fRatio, 1.0f, 1000.f);
+	//XMStoreFloat4x4(&mProj, P);*/
+
+	//static_cast<CCamera*>(CCameraManager::GetInst()->GetMainCam().get())->SetCameraType(CAMERA_TYPE::CT_3D);
+	//
+	//BuildOffscreenViews();
+	//mBlur.Init(m_tRS.iWidth, m_tRS.iHeight,
+	//	DXGI_FORMAT_R8G8B8A8_UNORM);
+}
+
+void CDevice::Enter()
+{
+	m_pThread->Enter();
+}
+
+void CDevice::Leave()
+{
+	m_pThread->Leave();
 }

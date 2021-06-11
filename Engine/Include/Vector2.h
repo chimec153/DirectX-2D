@@ -1,14 +1,16 @@
 #pragma once
 
-#include "Matrix.h"
+#include "EngineMath.h"
+#include <Windows.h>
 
-typedef __declspec(align(16)) struct _tagVector2
+typedef struct _tagVector2
 {
 	float x, y;
 
 	_tagVector2();
 	_tagVector2(const _tagVector2& v);
 	_tagVector2(const DirectX::XMVECTOR& v);
+	_tagVector2(const POINT& pt);
 	_tagVector2(float x, float y);
 
 	float operator[] (const int& iIdx)	const;
@@ -17,6 +19,7 @@ typedef __declspec(align(16)) struct _tagVector2
 	// =
 	_tagVector2& operator= (const _tagVector2& v);
 	_tagVector2& operator= (const DirectX::XMVECTOR& v);
+	_tagVector2& operator= (const POINT& pt);
 	_tagVector2& operator= (float f);
 
 	// ==
@@ -28,41 +31,49 @@ typedef __declspec(align(16)) struct _tagVector2
 	// +
 	_tagVector2 operator+ (const _tagVector2& v)	const;
 	_tagVector2 operator+ (const DirectX::XMVECTOR& v)	const;
+	_tagVector2 operator+ (const POINT& pt)	const;
 	_tagVector2 operator+ (float f)	const;
 
 	// +=
 	_tagVector2 operator+= (const _tagVector2& v);
 	_tagVector2 operator+= (const DirectX::XMVECTOR& v);
+	_tagVector2 operator+= (const POINT& pt);
 	_tagVector2 operator+= (float f);
 
 	// -
 	_tagVector2 operator- (const _tagVector2& v)	const;
 	_tagVector2 operator- (const DirectX::XMVECTOR& v)	const;
+	_tagVector2 operator- (const POINT& pt)	const;
 	_tagVector2 operator- (float f)	const;
 
 	// -=
 	_tagVector2 operator-= (const _tagVector2& v);
 	_tagVector2 operator-= (const DirectX::XMVECTOR& v);
+	_tagVector2 operator-= (const POINT& pt);
 	_tagVector2 operator-= (float f);
 
 	// *
 	_tagVector2 operator* (const _tagVector2& v)	const;
 	_tagVector2 operator* (const DirectX::XMVECTOR& v)	const;
+	_tagVector2 operator* (const POINT& pt)	const;
 	_tagVector2 operator* (float f)	const;
 
 	// *=
 	_tagVector2 operator*= (const _tagVector2& v);
 	_tagVector2 operator*= (const DirectX::XMVECTOR& v);
+	_tagVector2 operator*= (const POINT& pt);
 	_tagVector2 operator*= (float f);
 
 	// /
 	_tagVector2 operator/ (const _tagVector2& v)	const;
 	_tagVector2 operator/ (const DirectX::XMVECTOR& v)	const;
+	_tagVector2 operator/ (const POINT& pt)	const;
 	_tagVector2 operator/ (float f)	const;
 
 	// /=
 	_tagVector2 operator/= (const _tagVector2& v);
 	_tagVector2 operator/= (const DirectX::XMVECTOR& v);
+	_tagVector2 operator/= (const POINT& pt);
 	_tagVector2 operator/= (float f);
 
 	float Length();
@@ -75,5 +86,6 @@ typedef __declspec(align(16)) struct _tagVector2
 
 	void Convert(const DirectX::XMVECTOR& v);
 	DirectX::XMVECTOR Convert()	const;
-}Vector2, *PVector2;
+}Vector2, * PVector2;
 
+const _tagVector2 operator*(float f, const _tagVector2& v);

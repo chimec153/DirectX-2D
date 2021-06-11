@@ -1,0 +1,480 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="01. MainGameMode">
+      <UniqueIdentifier>{a0b92a13-9ea4-41d8-893a-857e136f8f58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Object">
+      <UniqueIdentifier>{d70376e6-fa29-49a6-a704-b86a8ed618f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Object\01. Player">
+      <UniqueIdentifier>{2387cf30-a4ac-4354-b0fe-bbdede9e697b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Object\02. Bullet">
+      <UniqueIdentifier>{8dca103d-dd2b-4a99-b1d3-307fbf42b599}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. ViewManager">
+      <UniqueIdentifier>{8e565513-bcf6-435a-ad35-3bc856f47193}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. ClientCreateSystem">
+      <UniqueIdentifier>{a940732c-966b-47fb-9446-8ae9872a7f5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Object\03. Minion">
+      <UniqueIdentifier>{17cf31ca-88f3-4cc7-9fff-cec2c9eb878e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Object\04. MinonBullet">
+      <UniqueIdentifier>{5df63190-e862-4432-bab1-916635f493f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Object\05. Tile">
+      <UniqueIdentifier>{f4e76bc8-340d-4c18-8ac6-7c06f3f19e5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. UI">
+      <UniqueIdentifier>{63d175ca-83fd-42cc-bc65-c8730b131fec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Object\06. Effect">
+      <UniqueIdentifier>{736ad659-0979-4947-9c69-b98cb28d902f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Object\07. Ride">
+      <UniqueIdentifier>{c9ec460d-fd73-49d0-a573-97a2fb1625f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. UI\01. Window">
+      <UniqueIdentifier>{579f665b-5486-4fbb-adaf-2f45ab5b3242}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. UI\01. Window\01. RideWindow">
+      <UniqueIdentifier>{6dec982b-b5da-4d6f-8ff8-cdd251c5b7d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. UI\01. Window\02. PathWindow">
+      <UniqueIdentifier>{f8128b67-f46b-4f48-a0d1-369ef71657d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. UI\01. Window\03. RollerCoasterContructionWindow">
+      <UniqueIdentifier>{2ec10b0a-4666-4751-9a40-e7f457c224f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. UI\01. Window\04. SelectWindow">
+      <UniqueIdentifier>{574bf061-9106-4525-a456-2184741d6959}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06. Thread">
+      <UniqueIdentifier>{e5111ba5-3628-4f03-a53c-4b0b98753dda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07. EditDlg">
+      <UniqueIdentifier>{8fd9ae71-7722-4304-9488-ae2e67a6d0d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08. Socket">
+      <UniqueIdentifier>{cec3914d-980d-4046-b609-f537f7e8bc7e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GameEditor.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MainFrm.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEditorDoc.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEditorView.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\Object\Player.h">
+      <Filter>02. Object\01. Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\GameMode\MainGameMode.h">
+      <Filter>01. MainGameMode</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\Object\Bullet.h">
+      <Filter>02. Object\02. Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewManager.h">
+      <Filter>03. ViewManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\Setting.h">
+      <Filter>01. MainGameMode</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\Object\Minion.h">
+      <Filter>02. Object\03. Minion</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\Object\MinionBullet.h">
+      <Filter>02. Object\04. MinonBullet</Filter>
+    </ClInclude>
+    <ClInclude Include="ClientInstance.h">
+      <Filter>01. MainGameMode</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\UI\ClientButton.h">
+      <Filter>05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\Object\Effect.h">
+      <Filter>02. Object\06. Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\UI\Br.h">
+      <Filter>05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\UI\CheckBox.h">
+      <Filter>05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\UI\RadioBox.h">
+      <Filter>05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\UI\UIPanel.h">
+      <Filter>05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\UI\SliderControl.h">
+      <Filter>05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\Object\Marry.h">
+      <Filter>02. Object\07. Ride</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\GameMode\StartGameMode.h">
+      <Filter>01. MainGameMode</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\Object\TileObj.h">
+      <Filter>02. Object\05. Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\ClientCreateSystem.h">
+      <Filter>04. ClientCreateSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\UI\Window.h">
+      <Filter>05. UI\01. Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\UI\RideWindow.h">
+      <Filter>05. UI\01. Window\01. RideWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\UI\PathWindow.h">
+      <Filter>05. UI\01. Window\02. PathWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\UI\ConstructionWindow.h">
+      <Filter>05. UI\01. Window\03. RollerCoasterContructionWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\Object\Coaster.h">
+      <Filter>02. Object\07. Ride</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\GameMode\LoadingMode.h">
+      <Filter>01. MainGameMode</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\LoadingThread.h">
+      <Filter>06. Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="AniEditor.h">
+      <Filter>07. EditDlg</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraDlg.h">
+      <Filter>07. EditDlg</Filter>
+    </ClInclude>
+    <ClInclude Include="CColliderOBBDlg.h">
+      <Filter>07. EditDlg</Filter>
+    </ClInclude>
+    <ClInclude Include="CheckBoxDlg.h">
+      <Filter>07. EditDlg</Filter>
+    </ClInclude>
+    <ClInclude Include="CMesh2DDlg.h">
+      <Filter>07. EditDlg</Filter>
+    </ClInclude>
+    <ClInclude Include="ColliderCircleDlg.h">
+      <Filter>07. EditDlg</Filter>
+    </ClInclude>
+    <ClInclude Include="ColliderInfo.h">
+      <Filter>07. EditDlg</Filter>
+    </ClInclude>
+    <ClInclude Include="ColliderLineDlg.h">
+      <Filter>07. EditDlg</Filter>
+    </ClInclude>
+    <ClInclude Include="ColliderPointDlg.h">
+      <Filter>07. EditDlg</Filter>
+    </ClInclude>
+    <ClInclude Include="CStaticMeshDlg.h">
+      <Filter>07. EditDlg</Filter>
+    </ClInclude>
+    <ClInclude Include="DetailObj.h">
+      <Filter>07. EditDlg</Filter>
+    </ClInclude>
+    <ClInclude Include="RendererDlg.h">
+      <Filter>07. EditDlg</Filter>
+    </ClInclude>
+    <ClInclude Include="PixelColDlg.h">
+      <Filter>07. EditDlg</Filter>
+    </ClInclude>
+    <ClInclude Include="RadioDlg.h">
+      <Filter>07. EditDlg</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundDlg.h">
+      <Filter>07. EditDlg</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteDlg.h">
+      <Filter>07. EditDlg</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelDlg.h">
+      <Filter>07. EditDlg</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjCreate.h">
+      <Filter>07. EditDlg</Filter>
+    </ClInclude>
+    <ClInclude Include="FontDlg.h">
+      <Filter>07. EditDlg</Filter>
+    </ClInclude>
+    <ClInclude Include="TileMapDlg.h">
+      <Filter>07. EditDlg</Filter>
+    </ClInclude>
+    <ClInclude Include="UIBarDlg.h">
+      <Filter>07. EditDlg</Filter>
+    </ClInclude>
+    <ClInclude Include="UIButtonDlg.h">
+      <Filter>07. EditDlg</Filter>
+    </ClInclude>
+    <ClInclude Include="UIControlDlg.h">
+      <Filter>07. EditDlg</Filter>
+    </ClInclude>
+    <ClInclude Include="UIImageDlg.h">
+      <Filter>07. EditDlg</Filter>
+    </ClInclude>
+    <ClInclude Include="UIListDlg.h">
+      <Filter>07. EditDlg</Filter>
+    </ClInclude>
+    <ClInclude Include="UISliderDlg.h">
+      <Filter>07. EditDlg</Filter>
+    </ClInclude>
+    <ClInclude Include="UITabDlg.h">
+      <Filter>07. EditDlg</Filter>
+    </ClInclude>
+    <ClInclude Include="UITitleDlg.h">
+      <Filter>07. EditDlg</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldObj.h">
+      <Filter>07. EditDlg</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\Socket\SocketManager.h">
+      <Filter>08. Socket</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="GameEditor.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFrm.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEditorDoc.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEditorView.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\Object\Player.cpp">
+      <Filter>02. Object\01. Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\GameMode\MainGameMode.cpp">
+      <Filter>01. MainGameMode</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\Object\Bullet.cpp">
+      <Filter>02. Object\02. Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewManager.cpp">
+      <Filter>03. ViewManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\Setting.cpp">
+      <Filter>01. MainGameMode</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\Object\Minion.cpp">
+      <Filter>02. Object\03. Minion</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\Object\MinionBullet.cpp">
+      <Filter>02. Object\04. MinonBullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\GameMode\ClientInstance.cpp">
+      <Filter>01. MainGameMode</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\UI\ClientButton.cpp">
+      <Filter>05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\Object\Effect.cpp">
+      <Filter>02. Object\06. Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\UI\Br.cpp">
+      <Filter>05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\UI\CheckBox.cpp">
+      <Filter>05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\UI\RadioBox.cpp">
+      <Filter>05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\UI\UIPanel.cpp">
+      <Filter>05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\UI\SliderControl.cpp">
+      <Filter>05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\Object\Marry.cpp">
+      <Filter>02. Object\07. Ride</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\GameMode\StartGameMode.cpp">
+      <Filter>01. MainGameMode</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\Object\TileObj.cpp">
+      <Filter>02. Object\05. Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\ClientCreateSystem.cpp">
+      <Filter>04. ClientCreateSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\UI\Window.cpp">
+      <Filter>05. UI\01. Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\UI\RideWindow.cpp">
+      <Filter>05. UI\01. Window\01. RideWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\UI\PathWindow.cpp">
+      <Filter>05. UI\01. Window\02. PathWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\UI\ConstructionWindow.cpp">
+      <Filter>05. UI\01. Window\03. RollerCoasterContructionWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\Object\Coaster.cpp">
+      <Filter>02. Object\07. Ride</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\GameMode\LoadingMode.cpp">
+      <Filter>01. MainGameMode</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\LoadingThread.cpp">
+      <Filter>06. Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="AniEditor.cpp">
+      <Filter>07. EditDlg</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraDlg.cpp">
+      <Filter>07. EditDlg</Filter>
+    </ClCompile>
+    <ClCompile Include="CColliderOBBDlg.cpp">
+      <Filter>07. EditDlg</Filter>
+    </ClCompile>
+    <ClCompile Include="CheckBoxDlg.cpp">
+      <Filter>07. EditDlg</Filter>
+    </ClCompile>
+    <ClCompile Include="CMesh2DDlg.cpp">
+      <Filter>07. EditDlg</Filter>
+    </ClCompile>
+    <ClCompile Include="ColliderCircleDlg.cpp">
+      <Filter>07. EditDlg</Filter>
+    </ClCompile>
+    <ClCompile Include="ColliderInfo.cpp">
+      <Filter>07. EditDlg</Filter>
+    </ClCompile>
+    <ClCompile Include="ColliderLineDlg.cpp">
+      <Filter>07. EditDlg</Filter>
+    </ClCompile>
+    <ClCompile Include="ColliderPointDlg.cpp">
+      <Filter>07. EditDlg</Filter>
+    </ClCompile>
+    <ClCompile Include="CStaticMeshDlg.cpp">
+      <Filter>07. EditDlg</Filter>
+    </ClCompile>
+    <ClCompile Include="DetailObj.cpp">
+      <Filter>07. EditDlg</Filter>
+    </ClCompile>
+    <ClCompile Include="FontDlg.cpp">
+      <Filter>07. EditDlg</Filter>
+    </ClCompile>
+    <ClCompile Include="PixelColDlg.cpp">
+      <Filter>07. EditDlg</Filter>
+    </ClCompile>
+    <ClCompile Include="RadioDlg.cpp">
+      <Filter>07. EditDlg</Filter>
+    </ClCompile>
+    <ClCompile Include="RendererDlg.cpp">
+      <Filter>07. EditDlg</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundDlg.cpp">
+      <Filter>07. EditDlg</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteDlg.cpp">
+      <Filter>07. EditDlg</Filter>
+    </ClCompile>
+    <ClCompile Include="TileMapDlg.cpp">
+      <Filter>07. EditDlg</Filter>
+    </ClCompile>
+    <ClCompile Include="UIBarDlg.cpp">
+      <Filter>07. EditDlg</Filter>
+    </ClCompile>
+    <ClCompile Include="UIButtonDlg.cpp">
+      <Filter>07. EditDlg</Filter>
+    </ClCompile>
+    <ClCompile Include="UIControlDlg.cpp">
+      <Filter>07. EditDlg</Filter>
+    </ClCompile>
+    <ClCompile Include="UIImageDlg.cpp">
+      <Filter>07. EditDlg</Filter>
+    </ClCompile>
+    <ClCompile Include="UIListDlg.cpp">
+      <Filter>07. EditDlg</Filter>
+    </ClCompile>
+    <ClCompile Include="UISliderDlg.cpp">
+      <Filter>07. EditDlg</Filter>
+    </ClCompile>
+    <ClCompile Include="UITabDlg.cpp">
+      <Filter>07. EditDlg</Filter>
+    </ClCompile>
+    <ClCompile Include="UITitleDlg.cpp">
+      <Filter>07. EditDlg</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldObj.cpp">
+      <Filter>07. EditDlg</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelDlg.cpp">
+      <Filter>07. EditDlg</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjCreate.cpp">
+      <Filter>07. EditDlg</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\Socket\SocketManager.cpp">
+      <Filter>08. Socket</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GameEditor.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\GameEditor.rc2">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="..\..\EditorCopy.bat">
+      <Filter>소스 파일</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\GameEditorDoc.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\GameEditor.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

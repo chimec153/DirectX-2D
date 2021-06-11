@@ -1,7 +1,10 @@
 #pragma once
 
-#include "GameEngine.h"
 #include "resource.h"
+#include "GameEngine.h"
+#include <WinSock2.h>
+
+//#pragma comment(lib, "ws2_32.lib")
 
 #ifdef _WIN64
 
